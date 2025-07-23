@@ -1,0 +1,5 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName course_update_course
+
+ConnectionString mongodb://localhost:27017

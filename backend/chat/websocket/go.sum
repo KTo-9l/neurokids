@@ -1,0 +1,13 @@
+github.com/big-larry/suckhttp v0.0.0-20250417113412-b2d284b11f53 h1:dqvgVmM58DRnPDM5J5uO3M6hzd+xg3sWZNSO5vBUKxI=
+github.com/big-larry/suckhttp v0.0.0-20250417113412-b2d284b11f53/go.mod h1:Y7dQaxFjl8xa297Tv6htkLdMhMQutCS6pfPVaWPPwt8=
+github.com/gobwas/httphead v0.1.0 h1:exrUm0f4YX0L7EBwZHuCF4GDp8aJfVeBrlLQrs6NqWU=
+github.com/gobwas/httphead v0.1.0/go.mod h1:O/RXo79gxV8G+RqlR/otEwx4Q36zl9rqC5u12GKvMCM=
+github.com/gobwas/pool v0.2.1 h1:xfeeEhW7pwmX8nuLVlqbzVc7udMDrwetjEv+TZIz1og=
+github.com/gobwas/pool v0.2.1/go.mod h1:q8bcK0KcYlCgd9e7WYLm9LpyS+YeLd8JVDW6WezmKEw=
+github.com/gobwas/ws v1.4.0 h1:CTaoG1tojrh4ucGPcoJFiAQUAsEWekEWvLy7GsVNqGs=
+github.com/gobwas/ws v1.4.0/go.mod h1:G3gNqMNtPppf5XUz7O4shetPpcZ1VJ7zt18dlUeakrc=
+github.com/okonma-violet/confdecoder v0.0.0-20230926094403-7e3eab7eff29 h1:B4tx67hvbtrTyYpbbR9lsuA5ZJutftoL/1IezRXldJo=
+github.com/okonma-violet/confdecoder v0.0.0-20230926094403-7e3eab7eff29/go.mod h1:ww/+SFov4W8uAfhPC5Rm37HKLQCROEaYi95Ikfh/Tkg=
+github.com/okonma-violet/dynamicworkerspool v0.0.0-20240317115954-810a6361f715 h1:vxsat2Y8CWtsaDF4D43qJp9K2K/8bPTDfWpIT09/sWc=
+github.com/okonma-violet/dynamicworkerspool v0.0.0-20240317115954-810a6361f715/go.mod h1:H6sSJItqki5t+8hoCdZepIW4jLEnPCSN6rY/U85Zay4=
+golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

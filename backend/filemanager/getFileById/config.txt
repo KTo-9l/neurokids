@@ -1,0 +1,6 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName filesharing_get_file_by_id
+
+DBName       filesharing
+GridFSPrefix tmpPrefix

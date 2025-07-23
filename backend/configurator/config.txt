@@ -1,0 +1,2 @@
+ListenLocal tcp:8099
+Settings servsettings.conf

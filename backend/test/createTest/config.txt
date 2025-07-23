@@ -1,0 +1,5 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName test_create_test
+
+ConnectionString mongodb://localhost:27017
