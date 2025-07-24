@@ -9,7 +9,7 @@ import (
 
 func (s *service) getChats(l logger.Logger, uid string) (chats []models.Chat, err error) {
 	selector := make(map[string]interface{})
-	selector["members"] = uid
+	selector["members"] = mongoApi.StringToObjectId(uid)
 
 	chats, err = mongoApi.ListTypifiedCollectionWithSelector[models.Chat](s.collection, selector)
 	if err != nil {

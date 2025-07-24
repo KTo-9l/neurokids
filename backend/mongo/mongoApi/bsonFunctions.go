@@ -15,6 +15,10 @@ func ObjectIdInterfaceToString(inter interface{}) string {
 	return ""
 }
 
+func StringToObjectId(str string) bson.ObjectId {
+	return bson.ObjectIdHex(str)
+}
+
 func NewObjectId() bson.ObjectId {
 	return bson.NewObjectId()
 }

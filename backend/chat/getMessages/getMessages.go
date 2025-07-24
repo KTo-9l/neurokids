@@ -9,7 +9,7 @@ import (
 
 func (s *service) getMessages(l logger.Logger, chatId string, amount int) (messages []models.Message, err error) {
 	selector := make(map[string]interface{})
-	selector["chatId"] = chatId
+	selector["chatId"] = mongoApi.StringToObjectId(chatId)
 
 	if amount == 0 {
 		messages, err = mongoApi.ListTypifiedSortedCollectionByFields[models.Message](s.collection, selector, []string{"-time"})

@@ -10,7 +10,7 @@ import (
 
 func (s *service) getAllTestsUser(l logger.Logger, uid string) (testsUser []models.TestUser, err error) {
 	selector := make(map[string]interface{})
-	selector["userId"] = uid
+	selector["userId"] = mongoApi.StringToObjectId(uid)
 
 	testsUser, err = mongoApi.ListTypifiedCollectionWithSelector[models.TestUser](s.collection, selector)
 	if err != nil {
