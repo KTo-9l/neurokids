@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 
+	"github.com/big-larry/mgo/bson"
 	"github.com/okonma-violet/services/logs/logger"
 )
 
 func initHub() {
 	hub = &Hub{
-		clients: make(map[string][]*Client),
+		clients: make(map[bson.ObjectId][]*Client),
 	}
 }
 

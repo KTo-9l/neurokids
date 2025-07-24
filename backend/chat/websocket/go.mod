@@ -15,6 +15,8 @@ replace github.com/okonma-violet/services => /home/andrey/go/pkg/mod/github.com/
 replace github.com/big-larry/suckutils => /home/andrey/go/pkg/mod/github.com/big-larry/suckutils@v0.0.0-20231029230114-645d5d858694
 
 require (
+	dikobra3/mongoApi v0.0.0-00010101000000-000000000000
+	github.com/big-larry/mgo v1.0.0
 	github.com/big-larry/suckhttp v0.0.0-20250417113412-b2d284b11f53
 	github.com/gobwas/ws v1.4.0
 	github.com/okonma-violet/services v0.0.0-00010101000000-000000000000
