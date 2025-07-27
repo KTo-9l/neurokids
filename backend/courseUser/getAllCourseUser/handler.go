@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dikobra3/mongoApi"
 	"dikobra3/utils"
 
 	"github.com/big-larry/suckhttp"
@@ -10,7 +11,7 @@ import (
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
 	if req.GetMethod() == suckhttp.GET {
 		uid := req.GetHeader("x-user-id")
-		if uid == "" {
+		if uid == "" || !mongoApi.IsObjectId(uid) {
 			response = suckhttp.NewResponse(401, "Unauthorized")
 			return
 		}

@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 
+	"dikobra3/mongoApi"
 	"dikobra3/utils"
 
 	"github.com/big-larry/suckhttp"
@@ -12,7 +13,7 @@ import (
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
 	if req.GetMethod() == suckhttp.GET {
 		chatId := req.Uri.Query().Get("chatId")
-		if chatId == "" {
+		if chatId == "" || !mongoApi.IsObjectId(chatId) {
 			response = suckhttp.NewResponse(400, "Bad Request")
 			return response, err
 		}

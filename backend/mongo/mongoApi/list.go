@@ -52,12 +52,6 @@ func ListSortedCollection(collection *mgo.Collection, sort []string) (coll []int
 	return
 }
 
-func ListTypifiedSortedCollectionWithSelector[T any](collection *mgo.Collection, selector interface{}, sort []string) (coll []T, err error) {
-	q := collection.Find(selector).Sort(sort...)
-	err = q.All(&coll)
-	return
-}
-
 func ListTypifiedSortedCollectionByFields[T any](collection *mgo.Collection, selector map[string]interface{}, sort []string) (coll []T, err error) {
 	q := collection.Find(selector).Sort(sort...)
 	err = q.All(&coll)
@@ -67,6 +61,17 @@ func ListTypifiedSortedCollectionByFields[T any](collection *mgo.Collection, sel
 func ListLimitedCollectionByFields[T any](collection *mgo.Collection, selector map[string]interface{}, sort []string, amount int) (coll []T, err error) {
 	q := collection.Find(selector).Sort(sort...).Limit(amount)
 	err = q.All(&coll)
+	return
+}
+
+func ListWithSelect[T any](collection *mgo.Collection, selector map[string]interface{}) (coll []T, err error) {
+	q := collection.Find(nil).Select(selector)
+	err = q.All(&coll)
+	return
+}
+
+func FindByIdWithSelect[T any](collection *mgo.Collection, id string, selector map[string]interface{}) (obj T, err error) {
+	err = collection.Find(bson.M{"_id": bson.ObjectIdHex(id)}).Select(selector).One(&obj)
 	return
 }
 

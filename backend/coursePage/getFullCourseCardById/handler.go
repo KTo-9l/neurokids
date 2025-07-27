@@ -10,16 +10,16 @@ import (
 
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
 	if req.GetMethod() == suckhttp.GET {
-		uid := req.GetHeader("x-user-id")
-		if uid == "" || !mongoApi.IsObjectId(uid) {
-			response = suckhttp.NewResponse(401, "Unauthorized")
+		id := req.Uri.Query().Get("id")
+		if !mongoApi.IsObjectId(id) {
+			response = suckhttp.NewResponse(400, "Bad Request")
 			return
 		}
 
-		if testsUser, err := s.getAllTestsUser(l, uid); err != nil {
+		if fullCourseCard, err := s.getFullCourseCardById(l, id); err != nil {
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 		} else {
-			body, err := utils.ObjectToBytes(testsUser)
+			body, err := utils.ObjectToBytes(fullCourseCard)
 			if err != nil {
 				l.Error("ObjectToBytes", err)
 				response = suckhttp.NewResponse(500, "Internal Server Error")

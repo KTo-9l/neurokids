@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 
-	"course/models"
+	"coursePage/models"
 
 	"dikobra3/mongoApi"
 
@@ -11,20 +11,23 @@ import (
 	"github.com/okonma-violet/services/logs/logger"
 )
 
-func (s *service) updateCourse(l logger.Logger, reqBytes []byte) (course models.Course, err error) {
+func (s *service) updateCourseMeta(l logger.Logger, reqBytes []byte) (course models.CourseMeta, err error) {
 	err = json.Unmarshal(reqBytes, &course)
 	if err != nil {
 		l.Error("Course Unmarshal", err)
-		return models.Course{}, err
+		return models.CourseMeta{}, err
 	}
 
 	toUpdate := bson.M{
 		"$set": bson.M{
-			"lessons": course.Lessons,
+			"title":   course.Title,
+			"author":  course.Author,
+			"shown":   course.Shown,
+			"deleted": course.Deleted,
 		},
 	}
 
-	err = mongoApi.UpdateById(s.collection, course.CourseId, toUpdate)
+	err = mongoApi.UpdateById(s.collection, course.Id, toUpdate)
 	if err != nil {
 		l.Error("coll.Update", err)
 	}

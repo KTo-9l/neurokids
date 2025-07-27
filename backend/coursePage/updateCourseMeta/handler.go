@@ -1,7 +1,6 @@
 package main
 
 import (
-	"dikobra3/mongoApi"
 	"dikobra3/utils"
 
 	"github.com/big-larry/suckhttp"
@@ -9,17 +8,11 @@ import (
 )
 
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
-	if req.GetMethod() == suckhttp.GET {
-		uid := req.GetHeader("x-user-id")
-		if uid == "" || !mongoApi.IsObjectId(uid) {
-			response = suckhttp.NewResponse(401, "Unauthorized")
-			return
-		}
-
-		if testsUser, err := s.getAllTestsUser(l, uid); err != nil {
+	if req.GetMethod() == suckhttp.POST {
+		if courseMeta, err := s.updateCourseMeta(l, req.Body); err != nil {
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 		} else {
-			body, err := utils.ObjectToBytes(testsUser)
+			body, err := utils.ObjectToBytes(courseMeta)
 			if err != nil {
 				l.Error("ObjectToBytes", err)
 				response = suckhttp.NewResponse(500, "Internal Server Error")

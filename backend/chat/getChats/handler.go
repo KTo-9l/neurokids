@@ -3,6 +3,7 @@ package main
 import (
 	"dikobra3/utils"
 
+	"github.com/big-larry/mgo/bson"
 	"github.com/big-larry/suckhttp"
 	"github.com/okonma-violet/services/logs/logger"
 )
@@ -10,7 +11,7 @@ import (
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
 	if req.GetMethod() == suckhttp.GET {
 		uid := req.GetHeader("x-user-id")
-		if uid == "" {
+		if uid == "" || !bson.IsObjectIdHex(uid) {
 			response = suckhttp.NewResponse(401, "Unauthorized")
 			return
 		}
