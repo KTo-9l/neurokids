@@ -1,0 +1,60 @@
+{{block "title" .}} Список пользователей {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css" />
+
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/common.css">
+<link rel="stylesheet" href="../static/css/icon.css">
+<link rel="stylesheet" href="../static/css/user.css">
+{{end}}
+
+{{block "js" .}}
+<script src="../static/js/diagnostic.js"></script>
+<script src="../static/js/mobile.js"></script>
+{{end}}
+
+
+
+{{block "userList" .}}
+
+<section class="section">
+
+    <div class="user__header">
+        <div class="search-box">
+            <h2>Список пользователей</h2>
+            <div class="search-input">
+                <span class="icon icon-search"></span>
+                <input type="text" placeholder="Поиск">
+                <span class="icon icon-close"></span>
+            </div>
+        </div>
+
+        <a href="/userCreate" class="button button--small">Добавить нового пользователя</a>
+    </div>
+    <div class="user__box">
+
+        <div class="user__item">
+            <span class="text20Medium name">
+                <span id="name">Акакий</span>
+                <span id="fatherland">Акакиевич</span>
+                <span id="second-name">Башмачикн</span>
+            </span>
+            <span class="data">Возраст: 183г (xx.xx.1842)</span>
+            <span class="date">регистрация: 23.07.2025</span>
+            <button class="button button--small btn-area red"> Заблокировать </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+{{end}}
+
+{{block "content" .}}
+
+{{block "userList" .}} {{end}}
+
+{{end}}

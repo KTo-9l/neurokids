@@ -1,16 +1,2743 @@
 <!DOCTYPE html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
     <title>Admin</title>
+
+
+    <style>
+        body {
+            background-color: #dadada;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        .container {
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            background: white;
+        }
+        .separator {
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+        .course-card {
+            border-radius: 5px;
+            border: 1px solid #000000;
+        }
+        .bg-gray {
+            --bs-bg-opacity: 1;
+            background-color: #cad5d7;
+        }
+    </style>
+
 </head>
 <body>
-    <h1>Welcome to admin panel for courses!</h1>
+    <div class="container p-4" id="mainPage">
+        <h1 class="text-center m-0">Welcome to admin panel for courses!</h1>
+        <hr>
+
+        <div class="card bg-light border-dark">
+            <div class="card-header bg-gray">
+                Создать
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <p class="card-text mb-1">Новый курс</p>
+                        <button id="createCourseBtn" class="btn btn-sm btn-outline-primary" title="Создать курс">
+                            <i class="bi bi-plus-circle me-2"></i>Создать курс
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="card-text mb-1">Новый тест</p>
+                        <button id="createTestBtn" class="btn btn-sm btn-outline-primary" title="Создать тест">
+                            <i class="bi bi-plus-circle me-2"></i>Создать тест
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card bg-light border-dark" id="courseList">
+            <div class="card-header bg-gray">
+                Созданные курсы
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card bg-light border-dark" id="testList">
+            <div class="card-header bg-gray">
+                Созданные тесты
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container p-4 d-none" id="createCourse">
+        <h1 class="text-center m-0">Введите автора и название курса</h1>
+        <hr>
+
+        <div class="card bg-light border-dark">
+            <div class="card-header bg-gray">
+                <button id="backToMainCourseCreate" class="btn btn-sm btn-outline-dark" title="Далее">
+                    <i class="bi bi-arrow-left me-2"></i>На главную
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="card-text mb-1">После подтверждения автора(-ов) и названия курс будет создан, его редактирование можно будет продолжить позже, нажав на кнопку редактирования в списке курсов.</p>
+
+                <form id="firstStepsCourseForm">                        
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Автор(-ы)</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="author" id="firstInputAuthor" placeholder="Введите автора(-ов)">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Название <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" id="firstInputTitleCourse" placeholder="Введите название" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="firstStepsCourse" class="btn btn-sm btn-outline-success" title="Создать">
+                        Создать<i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container p-4 d-none" id="editCourse">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="m-0">Редактирование курса</h2>
+            <button id="backToMainCourseEdit" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> На главную
+            </button>
+        </div>
+        <hr>
+
+        <form id="editCourseForm">
+
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    Метаинформация
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ID курса</label>
+                            <input type="text" class="form-control" name="id" disabled readonly required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Дата создания</label>
+                            <input type="text" class="form-control" name="createdAt" disabled readonly>
+                        </div>
+                        <div class="col-md-6 mb-0">
+                            <label class="form-label">Название курса <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="title" placeholder="Название" required>
+                        </div>
+                        <div class="col-md-6 mb-0">
+                            <label class="form-label">Автор курса</label>
+                            <input type="text" class="form-control" name="author" placeholder="Автор">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" name="shown" type="checkbox" id="shownSwitch">
+                                <label class="form-check-label" for="shownSwitch">Показывать курс на сайте</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" name="deleted" type="checkbox" id="deletedSwitch">
+                                <label class="form-check-label" for="deletedSwitch">Курс удален</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    Краткая информация (карточка)
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-1">
+                                <label class="form-label">Описание курса <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="description" rows="3" placeholder="Краткое описание" required></textarea>
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="form-label">Город</label>
+                                <input type="text" class="form-control" name="city" placeholder="Ранее введенный город">
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="form-label">Время прохождения</label>
+                                <input type="text" class="form-control" name="time" placeholder="Ранее введенное время прохождения">
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label">Тип курса</label>
+                                <input type="text" class="form-control" name="type" placeholder="Ранее введенный тип">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Превью курса <span class="text-danger">*</span></label>
+                            <div class="border rounded-3 overflow-hidden mb-3" style="height: 200px;">
+                                <img id="courseCover" src="https://avatars.mds.yandex.net/i?id=37b2d351697b66db0f7c2e383fb920af-4809613-images-thumbs&n=13" class="w-100 h-100 object-fit-cover" alt="Превью курса">
+                            </div>
+                            <div class="d-grid">
+                                <button id="changeCoverBtn" class="btn btn-outline-secondary">
+                                    <i class="bi bi-image me-1"></i> Изменить изображение
+                                </button>
+                                <!-- <input type="file" class="form-control" id="firstInputCover" name="cover" placeholder="Картинка или видео"> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    Полная информация (страница)
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label class="form-label">Подробное описание <span class="text-danger">*</span></label>
+                        <textarea class="form-control" name="headDescription" rows="4" placeholder="Подробное описание" required></textarea>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Форма обучения <span class="text-danger">*</span></label>
+                                <input type="text" name="educationForm" class="form-control" placeholder="Например, онлайн" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Документ по окончанию <span class="text-danger">*</span></label>
+                                <input type="text" name="endDocument" class="form-control" placeholder="Например, сертификат" required>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Модули <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="1" name="modules" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Часы теории <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="1" name="theoryHours" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Часы практики <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="1" name="practiceHours" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Недель на прохождение <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="1" name="weeks" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-fields-group" id="knowledgeBlock">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h3 class="h6 mb-0">Блок "Какие знания вы получите" <span class="text-danger">*</span></h3>
+                                <small class="text-muted">Заголовок блока <span class="text-danger">*</span></small>
+                                <input type="text" class="form-control mt-1" name="knowledgeBlockHeader" required>
+                            </div>
+                            <button id="createKnowledgeBtn" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-plus-circle me-1"></i> Добавить знание
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                        </div>
+                    </div>
+
+                    <div class="dynamic-fields-group" id="forComfortBlock">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h3 class="h6 mb-0">Блок "Для комфортного прохождения понадобится" <span class="text-danger">*</span></h3>
+                                <small class="text-muted">Заголовок блока <span class="text-danger">*</span></small>
+                                <input type="text" class="form-control mt-1" name="comfortBlockHeader" required>
+                            </div>
+                            <button id="createInstrumentBtn" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-plus-circle me-1"></i> Добавить инструмент
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="p-3 bg-white border rounded mb-2">
+                                <div class="row instrument-item align-items-center">
+                                    <div class="col-md-2 mb-2 mb-md-0">
+                                        <div class="text-center p-2 border rounded">
+                                            <i class="bi bi-filetype-html fs-2"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <input type="text" class="form-control" name="text" placeholder="Название инструмента" value="Комплюктер" required="">
+                                        </div>
+                                        <div class="row">
+                                            <input type="file" class="form-control" name="icon" id="firstInputCover" placeholder="Картинка или видео" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-center">
+                                        <button class="btn btn-sm btn-outline-danger w-100">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white border rounded mb-2">
+                                <div class="row instrument-item align-items-center">
+                                    <div class="col-md-2 mb-2 mb-md-0">
+                                        <label for="icon-upload" class="text-center p-2 border rounded d-block clickable" style="cursor: pointer;">
+                                            <!-- Здесь будет иконка или изображение -->
+                                            <img id="icon-preview" src="" alt="Preview" class="d-none" style="max-width: 100%; max-height: 80px; object-fit: contain;">
+                                            <i id="icon-default" class="bi bi-image fs-2"></i>
+                                        </label>
+                                        
+                                        <!-- Скрытый input для загрузки -->
+                                        <input type="file" id="icon-upload" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <input type="text" class="form-control" name="text" placeholder="Название инструмента" value="Комплюктер" required="">
+                                        </div>
+                                        <div class="row">
+                                            <input type="file" class="form-control" name="icon" id="firstInputCover" placeholder="Картинка или видео" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-center">
+                                        <button class="btn btn-sm btn-outline-danger w-100">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-fields-group" id="faqBlock">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h6 mb-0">Часто задаваемые вопросы (FAQ) <span class="text-danger">*</span></h3>
+                            <button id="createFaqBtn" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-plus-circle me-1"></i> Добавить вопрос
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <h3 class="h6 mb-0">Уроки курса <span class="text-danger">*</span></h3>
+                        <button id="createLessonBtn" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-plus-circle me-1"></i> Добавить урок
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" id="lessonsBlock">
+                </div>
+            </div>
+
+            <hr>
+            
+            <div class="d-grid">
+                <button type="submit" id="saveChangesCourseBtn" class="btn btn-primary btn-lg">
+                    <i class="bi bi-check-circle me-1"></i> Сохранить изменения
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container p-4 d-none" id="createTest">
+        <h1 class="text-center m-0">Введите название теста</h1>
+        <hr>
+
+        <div class="card bg-light border-dark">
+            <div class="card-header bg-gray">
+                <button id="backToMainTestCreate" class="btn btn-sm btn-outline-dark" title="Далее">
+                    <i class="bi bi-arrow-left me-2"></i>На главную
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="card-text mb-1">После подтверждения названия тест будет создан, его редактирование можно будет продолжить позже, нажав на кнопку редактирования в списке тестов.</p>
+
+                <form id="firstStepsTestForm">                        
+                    <div class="row mb-3">
+                        <label for="firstInputTitleTest" class="col-sm-2 col-form-label">Название <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" id="firstInputTitleTest" placeholder="Введите название" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="firstStepsButton" class="btn btn-sm btn-outline-success" title="Создать">
+                        Создать<i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container p-4 d-none" id="editTest">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="m-0">Редактирование теста</h2>
+            <button id="backToMainTestEdit" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> На главную
+            </button>
+        </div>
+        <hr>
+        
+        <form id="editTestForm">
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    Метаинформация
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ID теста</label>
+                            <input type="text" class="form-control" name="id" disabled readonly>
+                        </div>
+                        <div class="col-md-6 mb-0">
+                            <label class="form-label">Название теста <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="deleted" id="deletedSwitch">
+                        <label class="form-check-label" for="deletedSwitch">Тест удален</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="card bg-light border-dark">
+                <div class="card-header bg-gray">
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <h3 class="h6 mb-0">Вопросы</h3>
+                        <button id="createQuestionBtn" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-plus-circle me-1"></i> Добавить вопрос
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" id="testQuestions">
+                    <div class="dynamic-fields-group mb-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="h6 mb-0">Вопрос 1</h3>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label">Тип вопроса</label>
+                                <select class="form-select" name="type">
+                                    <option value="choice">Выбор ответа</option>
+                                    <option value="input" selected>Ручной ввод</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Содержание вопроса</label>
+                            <textarea class="form-control" rows="3" name="info" placeholder="Введите содержание урока">Что такое БД?</textarea>
+                        </div>
+                        <div class="mb-3">
+                                <label class="form-label">Правильный ответ</label>
+                                <textarea class="form-control" rows="1" name="answer" placeholder="Введите правильный ответ">Что такое БД?</textarea>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="dynamic-fields-group mb-7">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="h6 mb-0">Вопрос 2</h3>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label">Тип вопроса</label>
+                                <select class="form-select" name="type">
+                                    <option value="choice" selected>Выбор ответа</option>
+                                    <option value="input">Ручной ввод</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Содержание вопроса</label>
+                            <textarea class="form-control" rows="3" name="info" placeholder="Введите содержание урока...">Что такое БД?</textarea>
+                        </div>
+                        <div class="mb-2">                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h3 class="h6 mb-0">Ответы</h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-plus-circle me-1"></i> Добавить вариант
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group mb-1">
+                                <div class="input-group-text">
+                                    <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with checkbox" name="answer" value="Аа...">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                            <div class="input-group mb-1">
+                                <div class="input-group-text">
+                                    <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input" checked>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with checkbox" name="answer" value="Структурированное хранилище">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                            <div class="input-group mb-1">
+                                <div class="input-group-text">
+                                    <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with checkbox" name="answer" value="Ну это файлики там вот тут тоже">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="d-grid">
+                <button type="submit" id="saveChangesTestBtn" class="btn btn-primary btn-lg">
+                    <i class="bi bi-check-circle me-1"></i> Сохранить изменения
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="testModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Выберите тест</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalTestList">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary">Создать новый тест</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const backToMainCourseCreate = document.getElementById('backToMainCourseCreate');
+        const backToMainCourseEdit = document.getElementById('backToMainCourseEdit');
+        const backToMainTestCreate = document.getElementById('backToMainTestCreate');
+        const backToMainTestEdit = document.getElementById('backToMainTestEdit');
+
+        backToMainCourseCreate.onclick = (event) => {
+            document.getElementById('createCourse').classList.add('d-none');
+            document.getElementById('mainPage').classList.remove('d-none');
+        }
+
+        backToMainCourseEdit.onclick = (event) => {
+            document.getElementById('editCourse').classList.add('d-none');
+            document.getElementById('mainPage').classList.remove('d-none');
+        }
+
+        backToMainTestCreate.onclick = (event) => {
+            document.getElementById('createTest').classList.add('d-none');
+            document.getElementById('mainPage').classList.remove('d-none');
+        }
+
+        backToMainTestEdit.onclick = (event) => {
+            document.getElementById('editTest').classList.add('d-none');
+            document.getElementById('mainPage').classList.remove('d-none');
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const createCourseBtn = document.getElementById('createCourseBtn');
+        createCourseBtn.onclick = (event) => {
+            document.getElementById('mainPage').classList.add('d-none');
+            document.getElementById('createCourse').classList.remove('d-none');
+        }
+
+        const createTestBtn = document.getElementById('createTestBtn');
+        createTestBtn.onclick = (event) => {
+            document.getElementById('mainPage').classList.add('d-none');
+            document.getElementById('editCourse').classList.add('d-none');
+            document.getElementById('createTest').classList.remove('d-none');
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const firstStepsCourseForm = document.getElementById('firstStepsCourseForm');
+        firstStepsCourseForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(firstStepsCourseForm);
+
+            const data = Object.fromEntries(formData.entries());
+
+            if (data.author === '') delete data.author
+            
+            console.log('Данные формы:', data);
+            firstStepsCourseForm.reset();
+            courseId = await createCourseMeta(data);
+            await createCourse(courseId);
+            if (courseId !== undefined) {
+                document.getElementById('createCourse').classList.add('d-none');
+                openEditCoursePage(courseId);
+            }
+        })
+
+        function createCourseMeta(formData) {
+            return fetch("/createCourseMeta", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error creating course meta");
+                    return undefined;
+                }
+                return response.json();
+            }).then(course => {
+                addCourseInTable(course);
+                return course.id;
+            });
+        }
+
+        function createCourse(cid) {
+            let courseData = {
+                courseId: cid
+            }
+            return fetch("/createCourse", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(courseData),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error creating course");
+                    return undefined;
+                }
+                return true
+            })
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const firstStepsTestForm = document.getElementById('firstStepsTestForm');
+        firstStepsTestForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(firstStepsTestForm);
+
+            const data = Object.fromEntries(formData.entries());
+
+            console.log('Данные формы:', data);
+            firstStepsTestForm.reset();
+            testId = await createTest(data);
+            if (testId !== undefined) {
+                openEditTestPage(testId);
+            }
+        })
+
+        function createTest(formData) {
+            return fetch("/createTest", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error creating test");
+                    return undefined;
+                }
+                return response.json();
+            }).then(test => {
+                addTestInTable(test);
+                return test.id;
+            })
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const courseList = document.getElementById('courseList');
+
+        loadCourses();
+
+        async function loadCourses() {
+            courses = await getCourseMetas();
+            if (courses === undefined || courses === null || courses.length === 0) {
+                insertEmptyCourseList();
+                return;
+            }
+            createCoursesTable(courses);
+        }
+
+        function getCourseMetas() {
+            return fetch("/getAllCourseMetas", {
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("can't get course list");
+                    return undefined;
+                }
+                return response.json();
+            })
+        }
+
+        function createCoursesTable(courses) {
+            let mainTableDiv = document.createElement('div');
+            mainTableDiv.classList = 'card-title mb-0';
+            mainTableDiv.innerHTML = `
+            <div class="card-title mb-0">
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="coursesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Автор</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <p class="card-text">"Показывать" - отображать курс у пользователей</p>
+            </div>
+            `;
+            courseList.appendChild(mainTableDiv);
+
+            courses.forEach(course => {
+                addCourseInTable(course);
+            });
+        }
+
+        function addCourseInTable(course) {
+            let table = document.getElementById('coursesTable');
+            if (table === null) {
+                courseList.removeChild(courseList.children[1]);
+                createCoursesTable([course]);
+                return
+            }
+            
+            tr = createCourseRow(course);
+            table.children[1].appendChild(tr);
+        }
+
+        function updateCourseRow(id, newCourse) {
+            let tbody = document.getElementById('coursesTable').children[1];
+            let targetRow = tbody.querySelector(`tr[data-id="${id}"]`);
+
+            newRow = createCourseRow(newCourse);
+            tbody.replaceChild(newRow, targetRow);
+        }
+
+        function createCourseRow(course) {
+            let tr = document.createElement('tr');
+
+            let tdId = document.createElement('td');
+            tdId.innerText = course.id;
+            let tdTitle = document.createElement('td');
+            tdTitle.innerText = course.title;
+            let tdAuthor = document.createElement('td');
+            tdAuthor.innerText = course.author;
+            let tdActions = document.createElement('td');
+            let actionsDiv = document.createElement('div');
+            actionsDiv.classList = 'd-flex gap-1 justify-content-center';
+
+            let watchCourse = document.createElement('a');
+            watchCourse.href = '#';
+            watchCourse.classList = 'btn btn-sm btn-outline-info';
+            watchCourse.title = 'Просмотреть';
+            watchCourse.innerHTML = `<i class="bi bi-eye me-2"></i>Просмотреть`;
+
+            let editCourse = document.createElement('button');
+            editCourse.id = 'editCourseBtn';
+            editCourse.classList = 'btn btn-sm btn-outline-primary';
+            editCourse.title = 'Редактировать';
+            editCourse.innerHTML = `<i class="bi bi-pencil me-2"></i>Редактировать`;
+            editCourse.onclick = () => {
+                openEditCoursePage(course.id);
+            }
+
+            let showCourse = document.createElement('button');
+            showCourse.id = 'showCourseBtn';
+            showCourse.classList = 'btn btn-sm btn-outline-secondary';
+            if (course.shown) {
+                showCourse.title = 'Скрыть';
+                showCourse.innerHTML = `<i class="bi bi-eye-slash me-2"></i>Скрыть`;
+            } else {
+                showCourse.title = 'Показывать';
+                showCourse.innerHTML = `<i class="bi bi-eye me-2"></i>Показывать`;
+            }
+            showCourse.onclick = () => {
+                fastShowCourse(course);
+            }
+
+            let deleteCourse = document.createElement('button');
+            deleteCourse.id = 'deleteCourseBtn';
+            if (course.deleted) {
+                deleteCourse.classList = 'btn btn-sm btn-outline-success';
+                deleteCourse.title = 'Восстановить';
+                deleteCourse.innerHTML = `<i class="bi bi-trash me-2"></i>Восстановить`;
+            } else {
+                deleteCourse.classList = 'btn btn-sm btn-outline-danger';
+                deleteCourse.title = 'Удалить';
+                deleteCourse.innerHTML = `<i class="bi bi-trash me-2"></i>Удалить`;
+            }
+            deleteCourse.onclick = () => {
+                fastDeleteCourse(course);
+            }
+
+            actionsDiv.append(watchCourse, editCourse, showCourse, deleteCourse);
+            tdActions.appendChild(actionsDiv);
+            tr.append(tdId, tdTitle, tdAuthor, tdActions);
+            tr.setAttribute('data-id', course.id);
+            return tr;
+        }
+
+        function insertEmptyCourseList() {
+            let cover = document.createElement('div');
+            cover.classList = 'card-body pt-0';
+
+            let p = document.createElement('p');
+            p.classList = 'card-text';
+            p.innerText = "Пока нет созданных курсов";
+
+            cover.appendChild(p);
+            courseList.appendChild(cover);
+        }
+        
+        function fastShowCourse(course) {
+            course.shortCard = undefined;
+            course.fullCard = undefined;
+            course.shown = !course.shown;
+
+            fetch("/updateCourseMeta", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(course),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error hide/show course");
+                }
+                return response.json();
+            }).then(course => {
+                updateCourseRow(course.id, course);
+            });
+        }
+
+        function fastDeleteCourse(course) {
+            course.shortCard = undefined;
+            course.fullCard = undefined;
+            course.deleted = !course.deleted;
+
+            fetch("/updateCourseMeta", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(course),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error delete/restore course");
+                }
+                return response.json();
+            }).then(course => {
+                updateCourseRow(course.id, course);
+            });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const testList = document.getElementById('testList');
+
+        loadTests();
+
+        async function loadTests() {
+            tests = await getTests();
+            if (tests === undefined || tests === null || tests.length === 0) {
+                insertEmptyTestList();
+                return;
+            }
+            createTestTable(tests);
+        }
+
+        function getTests() {
+            return fetch("/getAllTests", {
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("can't get test list");
+                    return undefined;
+                }
+                return response.json();
+            })
+        }
+
+        function createTestTable(tests) {
+            let mainTableDiv = document.createElement('div');
+            mainTableDiv.classList = 'card-title mb-0';
+            mainTableDiv.innerHTML = `
+            <div class="card-title mb-0">
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="testsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            `;
+            testList.appendChild(mainTableDiv);
+
+            tests.forEach(test => {
+                addTestInTable(test);
+            });
+        }
+
+        function addTestInTable(test) {
+            let table = document.getElementById('testsTable');
+            if (table === null) {
+                testList.removeChild(testList.children[1]);
+                createTestTable([test]);
+                return
+            }
+            
+            tr = createTestRow(test);
+            table.children[1].appendChild(tr);
+        }
+
+        function updateTestRow(id, newTest) {
+            let tbody = document.getElementById('testsTable').children[1];
+            let targetRow = tbody.querySelector(`tr[data-id="${id}"]`);
+
+            newRow = createTestRow(newTest);
+            tbody.replaceChild(newRow, targetRow);
+        }
+
+        function createTestRow(test) {
+            let tr = document.createElement('tr');
+
+            let tdId = document.createElement('td');
+            tdId.innerText = test.id;
+            let tdTitle = document.createElement('td');
+            tdTitle.innerText = test.title;
+            let tdActions = document.createElement('td');
+            let actionsDiv = document.createElement('div');
+            actionsDiv.classList = 'd-flex gap-1 justify-content-center';
+
+            let editTest = document.createElement('button');
+            editTest.id = 'editTestBtn';
+            editTest.classList = 'btn btn-sm btn-outline-primary';
+            editTest.title = 'Редактировать';
+            editTest.innerHTML = `<i class="bi bi-pencil me-2"></i>Редактировать`;
+            editTest.onclick = () => {
+                openEditTestPage(test.id);
+            }
+
+            let deleteTest = document.createElement('button');
+            deleteTest.id = 'deleteTestBtn';
+            if (test.deleted) {
+                deleteTest.classList = 'btn btn-sm btn-outline-success';
+                deleteTest.title = 'Восстановить';
+                deleteTest.innerHTML = `<i class="bi bi-trash me-2"></i>Восстановить`;
+            } else {
+                deleteTest.classList = 'btn btn-sm btn-outline-danger';
+                deleteTest.title = 'Удалить';
+                deleteTest.innerHTML = `<i class="bi bi-trash me-2"></i>Удалить`;
+            }
+            deleteTest.onclick = () => {
+                fastDeleteTest(test);
+            }
+
+            actionsDiv.append(editTest, deleteTest);
+            tdActions.appendChild(actionsDiv);
+            tr.append(tdId, tdTitle, tdActions);
+            tr.setAttribute('data-id', test.id);
+            return tr;
+        }
+
+        function insertEmptyTestList() {
+            let cover = document.createElement('div');
+            cover.classList = 'card-body pt-0';
+
+            let p = document.createElement('p');
+            p.classList = 'card-text';
+            p.innerText = "Пока нет созданных тестов";
+
+            cover.appendChild(p);
+            testList.appendChild(cover);
+        }
+
+        function fastDeleteTest(test) {
+            test.deleted = !test.deleted;
+
+            fetch("/updateTest", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(test),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error delete/restore test");
+                }
+                return response.json();
+            }).then(test => {
+                updateTestRow(test.id, test);
+            });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const editCourseForm = document.getElementById('editCourseForm');
+
+        async function openEditCoursePage(courseId) {
+            fullCourseInfo = await getFullCourseMeta(courseId);
+            console.log(fullCourseInfo);
+
+            fillCourseMeta(fullCourseInfo);
+            fillShortCard(fullCourseInfo);
+            fillFullCard(fullCourseInfo);
+            
+            courseLessons = await getCourseLessons(courseId);
+            console.log(courseLessons);
+            fillCourseLessons(courseLessons);
+
+            document.getElementById('mainPage').classList.add('d-none');
+            document.getElementById('editCourse').classList.remove('d-none');
+        }
+
+        function getFullCourseMeta(courseId) {
+            let uri = `/getFullCourseMetaById?id=${courseId}`;
+            console.log(uri);
+            return fetch(uri, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error get full course meta");
+                }
+                return response.json();
+            });
+        }
+
+        function getCourseLessons(courseId) {
+            let uri = `/getCourseById?id=${courseId}`;
+            return fetch(uri, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error get full course lessons");
+                }
+                return response.json();
+            });
+        }
+
+        function fillCourseMeta(course) {
+            editCourseForm.elements['id'].value = course.id;
+            editCourseForm.elements['createdAt'].value = course.createdAt;
+            editCourseForm.elements['title'].value = course.title;
+            editCourseForm.elements['author'].value = course.author === undefined ? '' : course.author;
+            editCourseForm.elements['shown'].checked = course.shown;
+            editCourseForm.elements['deleted'].checked = course.deleted;
+        }
+
+        function fillShortCard(course) {
+            editCourseForm.elements['description'].value = course.shortCard.description;
+            editCourseForm.elements['city'].value = (course.shortCard.city === undefined ? '' : course.shortCard.city);
+            editCourseForm.elements['time'].value = (course.shortCard.time === undefined ? '' : course.shortCard.time);
+            editCourseForm.elements['type'].value = (course.shortCard.type === undefined ? '' : course.shortCard.type);
+            document.getElementById('courseCover').src = (course.shortCard.cover === undefined ? '' : '/getFileByPath?path=' + course.shortCard.cover);
+        }
+
+        function fillFullCard(course) {
+            editCourseForm.elements['headDescription'].value = course.fullCard.headDescription;
+            editCourseForm.elements['educationForm'].value = course.fullCard.educationForm;
+            editCourseForm.elements['endDocument'].value = course.fullCard.endDocument;
+            editCourseForm.elements['modules'].value = course.fullCard.availableMaterial.modules;
+            editCourseForm.elements['theoryHours'].value = course.fullCard.availableMaterial.theoryHours;
+            editCourseForm.elements['practiceHours'].value = course.fullCard.availableMaterial.practiceHours;
+            editCourseForm.elements['weeks'].value = course.fullCard.availableMaterial.weeks;
+
+            editCourseForm.elements['knowledgeBlockHeader'].value = course.fullCard.knowledgeBlock.header;
+            
+            let knowledgeBlockContent = document.getElementById('knowledgeBlock').children[1];
+            knowledgeBlockContent.innerHTML = ``;
+            course.fullCard.knowledgeBlock.knowledge.forEach(knowledge => {
+                let knowledgeDiv = document.createElement('div');
+                knowledgeDiv.classList = 'p-3 bg-white border rounded mb-2';
+
+                let divRow = document.createElement('div');
+                divRow.classList = 'row knowledge-item';
+
+                let knowledgeHead = document.createElement('div');
+                knowledgeHead.classList = 'col-md-4 mb-2 mb-md-0';
+                knowledgeHead.innerHTML = `<input type="text" class="form-control" name="head" placeholder="Заголовок" value="${knowledge.head}" required>`;
+
+                let knowledgeBody = document.createElement('div');
+                knowledgeBody.classList = 'col-md-7';
+                knowledgeBody.innerHTML = `<textarea class="form-control" rows="1" name="body" placeholder="Описание" required>${knowledge.body}</textarea>`;
+
+                let knowledgeRemove = document.createElement('div');
+                knowledgeRemove.classList = 'col-md-1 d-flex align-items-center';
+                let knowledgeRemoveBtn = document.createElement('button');
+                knowledgeRemoveBtn.classList = 'btn btn-sm btn-outline-danger w-100';
+                knowledgeRemoveBtn.innerHTML = `<i class="bi bi-trash"></i>`;
+                knowledgeRemoveBtn.onclick = (event) => {
+                    event.preventDefault();
+                    knowledgeDiv.remove();
+                }   
+                
+                knowledgeRemove.appendChild(knowledgeRemoveBtn);
+                divRow.append(knowledgeHead, knowledgeBody, knowledgeRemove);
+                knowledgeDiv.appendChild(divRow);
+                knowledgeBlockContent.appendChild(knowledgeDiv);
+            });
+
+            editCourseForm.elements['comfortBlockHeader'].value = course.fullCard.forComfortBlock.head;
+
+            let forComfortBlockContent = document.getElementById('forComfortBlock').children[1];
+            forComfortBlockContent.innerHTML = ``;
+            course.fullCard.forComfortBlock.instruments.forEach((instrument, i)=> {
+                let instrumentDiv = document.createElement('div');
+                instrumentDiv.classList = 'p-3 bg-white border rounded mb-2';
+
+                let divRow = document.createElement('div');
+                divRow.classList = 'row instrument-item align-items-center';
+                divRow.setAttribute('instrument-id', i + 1);
+
+                let instrumentIconDiv = document.createElement('div');
+                instrumentIconDiv.classList = 'col-md-2 mb-2 mb-md-0';
+
+                let instrumentIconLabel = document.createElement('label');
+                instrumentIconLabel.classList = 'text-center p-2 border rounded d-block clickable';
+                instrumentIconLabel.htmlFor = `icon-upload-${i}`;
+                instrumentIconLabel.innerHTML =
+                `
+                <img id="icon-preview" src="/getFileByPath?path=${instrument.icon}" alt="Preview" style="max-width: 100%; object-fit: contain;">
+                `;
+
+                let instrumentIconInput = document.createElement('input');
+                instrumentIconInput.style = 'display: none;';
+                instrumentIconInput.type = 'file';
+                instrumentIconInput.id = `icon-upload-${i}`;
+                instrumentIconInput.accept = 'image/*';
+
+                instrumentIconInput.addEventListener('change', async (event) => {
+                    let file = event.target.files[0];
+                    if (!file) return;
+
+                    let renamedFile = new File([event.target.files[0]], `icon${i + 1}.png`, {
+                        type: event.target.files[0].type,
+                        lastModified: event.target.files[0].lastModified,
+                        lastModifiedDate: event.target.files[0].lastModifiedDate,
+                    });
+
+                    let form = new FormData();
+                    form.append('path', 'courses');
+                    form.append('path', editCourseForm.elements['id'].value);
+                    form.append('path', 'instruments');
+                    form.append('file', renamedFile);
+
+                    let ok = await upsertFile(form);
+                    if (ok) {
+                        instrumentIconLabel.children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/instruments/icon${i + 1}.png`;
+                        instrumentIconLabel.children[0].classList.remove('d-none');
+                    }
+                });
+
+                /*
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <label for="icon-upload" class="text-center p-2 border rounded d-block clickable" style="cursor: pointer;">
+                        <img id="icon-preview" src="${instrument.icon}" alt="Preview" style="max-width: 100%; object-fit: contain;">
+                    </label>
+                                        
+                    <input type="file" id="icon-upload" accept="image/*" style="display: none;">
+                </div>
+                */
+
+                instrumentIconDiv.append(instrumentIconLabel, instrumentIconInput);
+
+                let instrumentMain = document.createElement('div');
+                instrumentMain.classList = 'col-md-9';
+                instrumentMain.innerHTML = `
+                <div class="row">
+                    <input type="text" class="form-control" name="text" placeholder="Название инструмента" value="${instrument.text}" required>
+                </div>
+                `;
+
+                let instrumentRemove = document.createElement('div');
+                instrumentRemove.classList = 'col-md-1 d-flex align-items-center';
+                let instrumentRemoveBtn = document.createElement('button');
+                instrumentRemoveBtn.classList = 'btn btn-sm btn-outline-danger w-100';
+                instrumentRemoveBtn.innerHTML = `<i class="bi bi-trash"></i>`;
+                instrumentRemoveBtn.onclick = (event) => {
+                    event.preventDefault();
+                    instrumentDiv.remove();
+                }
+
+                instrumentRemove.appendChild(instrumentRemoveBtn);
+                divRow.append(instrumentIconDiv, instrumentMain, instrumentRemove);
+                instrumentDiv.appendChild(divRow);
+                forComfortBlockContent.appendChild(instrumentDiv);
+            });
+
+            let faqBlockContent = document.getElementById('faqBlock').children[1];
+            faqBlockContent.innerHTML = ``;
+            course.fullCard.faq.forEach(qa => {
+                let faqDiv = document.createElement('div');
+                faqDiv.classList = 'p-3 bg-white border rounded mb-2 faq-item';
+
+                let questionDiv = document.createElement('div');
+                questionDiv.classList = 'mb-2';
+                questionDiv.innerHTML = 
+                `
+                <label class="form-label">Вопрос</label>
+                <input type="text" class="form-control" name="question" value="${qa.question}" required>
+                `
+
+                let answerDiv = document.createElement('div');
+                answerDiv.innerHTML = 
+                `
+                <label class="form-label">Ответ</label>
+                <textarea class="form-control" name="answer" rows="2" required>${qa.answer}</textarea>
+                `
+
+                let removeBtn = document.createElement('button');
+                removeBtn.classList = 'btn btn-sm btn-outline-danger mt-2';
+                removeBtn.innerHTML = `<i class="bi bi-trash me-1"></i> Удалить вопрос`;
+                removeBtn.onclick = (event) => {
+                    event.preventDefault();
+                    faqDiv.remove();
+                }
+
+                faqDiv.append(questionDiv, answerDiv, removeBtn);
+                faqBlockContent.appendChild(faqDiv);
+            });
+        }
+
+        function fillCourseLessons(courseLessons) {
+            let lessonsBlock = document.getElementById('lessonsBlock');
+            lessonsBlock.innerHTML = ``;
+            courseLessons.lessons.forEach((lesson, i) => {
+                let lessonDiv = document.createElement('div');
+                lessonDiv.classList = 'dynamic-fields-group mb-4 lesson-item';
+
+                let lessonHeaderDiv = document.createElement('div');
+                lessonHeaderDiv.classList = 'd-flex justify-content-between align-items-start mb-2';
+                
+                let lessonHeaderH = document.createElement('h3');
+                lessonHeaderH.classList = 'h6 mb-0';
+                lessonHeaderH.innerText = `Урок ${i + 1}`;
+                let lessonHeaderB = document.createElement('div');
+                lessonHeaderB.classList = 'd-flex gap-2';
+                let lessonRemoveBtn = document.createElement('button');
+                lessonRemoveBtn.classList = 'btn btn-sm btn-outline-danger';
+                lessonRemoveBtn.innerHTML = `<i class="bi bi-trash"></i> Удалить`;
+                lessonRemoveBtn.onclick = (event) => {
+                    event.preventDefault();
+                    lessonDiv.remove();
+                }
+
+                lessonHeaderB.appendChild(lessonRemoveBtn);
+                lessonHeaderDiv.append(lessonHeaderH, lessonHeaderB);
+
+                let lessonTypeDiv = document.createElement('div');
+                lessonTypeDiv.classList = 'row mb-3';
+
+                let lessonTypeDivSmaller = document.createElement('div');
+                lessonTypeDivSmaller.classList = 'col-md-6';
+                
+                let lessonTypeLabel = document.createElement('label');
+                lessonTypeLabel.classList = 'form-label';
+                lessonTypeLabel.innerHTML = `Тип урока <span class=\"text-danger\">*</span>`;
+
+                let lessonTypeSelect = document.createElement('select');
+                lessonTypeSelect.classList = 'form-select';
+                lessonTypeSelect.name = 'lessonType';
+                lessonTypeSelect.addEventListener('change', (event) => {
+                    event.preventDefault();
+                    changeLessonType(event.target);
+                })
+                
+                let optionInfo = document.createElement('option');
+                optionInfo.value = 'info';
+                optionInfo.textContent = 'Информация';
+
+                let optionTest = document.createElement('option');
+                optionTest.value = 'test';
+                optionTest.textContent = 'Тест';
+
+                if (lesson.type === 'info') optionInfo.selected = true;
+                if (lesson.type === 'test') optionTest.selected = true;
+
+                lessonTypeSelect.append(optionInfo, optionTest);
+
+                lessonTypeDivSmaller.append(lessonTypeLabel, lessonTypeSelect);
+                lessonTypeDiv.appendChild(lessonTypeDivSmaller);
+
+                let lessonBody = document.createElement('div');
+                lessonBody.classList = 'mb-3';
+
+                switch (lesson.type) {
+                    case 'info':
+                        lessonBody.innerHTML = 
+                        `
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <label class="form-label">Контент урока <span class="text-danger">*</span></label>
+                            <button class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-plus-circle me-1"></i> Добавить блок контента
+                            </button>
+                        </div>
+                        <div id="lesson-content">
+                        </div>
+                        `;
+
+                        lessonBody.children[0].children[1].onclick = (event) => {
+                            event.preventDefault();
+                            let lessonContentBlock = document.createElement('div');
+                            lessonContentBlock.classList = 'mb-2 lesson-content-item';
+                            lessonContentBlock.innerHTML =
+                            `
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <label class="form-label">Тип контента <span class="text-danger">*</span></label>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                            <select class="form-select" name="lessonContentType">
+                                <option value="text" selected>Текст</option>
+                                <option value="image">Картинка</option>
+                                <option value="video">Видео</option>
+                                <option value="attachment">Файл</option>
+                            </select>
+                            <div>
+                                <textarea class="form-control" rows="3" name="lessonData" placeholder="Введите текст блока контента..." required></textarea>
+                            </div>
+                            `;
+
+                            lessonContentBlock.children[0].children[1].onclick = (event) => {
+                                event.preventDefault();
+                                lessonContentBlock.remove();
+                            }
+
+                            lessonContentBlock.children[1].addEventListener('change', (event) => {
+                                event.preventDefault();
+                                changeLessonContentType(event.target);
+                            })
+
+                            lessonBody.children[1].appendChild(lessonContentBlock);
+                        };
+
+                        lesson.info.forEach((infoBlock, infoI) => {
+                            let lessonContentBlock = document.createElement('div');
+                            lessonContentBlock.classList = 'mb-2 lesson-content-item';
+                            lessonContentBlock.innerHTML =
+                            `
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <label class="form-label">Тип контента <span class="text-danger">*</span></label>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                            <select class="form-select" name="lessonContentType">
+                                <option value="text" selected>Текст</option>
+                                <option value="image">Картинка</option>
+                                <option value="video">Видео</option>
+                                <option value="attachment">Файл</option>
+                            </select>
+                            <div>
+                            </div>
+                            `;
+                            lessonContentBlock.children[0].children[1].onclick = (event) => {
+                                event.preventDefault();
+                                lessonContentBlock.remove();
+                            }
+
+                            lessonContentBlock.children[1].addEventListener('change', (event) => {
+                                event.preventDefault();
+                                changeLessonContentType(event.target);
+                            })
+
+                            switch (infoBlock.type) {
+                                case 'text':
+                                    lessonContentBlock.children[1].children[0].selected = true
+                                    lessonContentBlock.children[2].innerHTML =
+                                    `
+                                    <textarea class="form-control" rows="3" name="lessonData" placeholder="Введите текст блока контента..." required>${infoBlock.data}</textarea>
+                                    `;
+                                    break;
+                                case 'image':
+                                    lessonContentBlock.children[1].children[1].selected = true;
+                                    lessonContentBlock.children[2].innerHTML =
+                                    `
+                                    <img id="lessonData" src="/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${infoI}.png" class="w-100 h-100 object-fit-cover" style="max-width: 30%;" alt="Выберите изображение или видео">
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="bi bi-image me-1"></i> Изменить изображение
+                                    </button>
+                                    `;
+
+                                    lessonContentBlock.children[2].children[1].onclick = (event) => {
+                                        event.preventDefault();
+
+                                        let input = document.createElement('input');
+                                        input.type = 'file';
+                                        input.style.display = 'none';
+
+                                        input.click();
+                                        input.addEventListener('change', async (event) => {
+                                            let lessonContentIndex = infoI;
+                                            let renamedFile = new File([input.files[0]], `lessonContent${lessonContentIndex}.png`, {
+                                                type: input.files[0].type,
+                                                lastModified: input.files[0].lastModified,
+                                                lastModifiedDate: input.files[0].lastModifiedDate,
+                                            });
+
+                                            let form = new FormData();
+                                            form.append('path', 'courses');
+                                            form.append('path', editCourseForm.elements['id'].value);
+                                            form.append('path', 'lessons');
+                                            form.append('path', i);
+                                            form.append('file', renamedFile);
+
+                                            let ok = await upsertFile(form);
+                                            if (ok) {
+                                                lessonContentBlock.children[2].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${lessonContentIndex}.png`;
+                                            }
+                                        })
+                                    }
+                                    break;
+                                case 'video':
+                                    lessonContentBlock.children[1].children[2].selected = true;
+                                    lessonContentBlock.children[2].innerHTML =
+                                    `
+                                    <video controls class="w-100 h-100 object-fit-cover" style="max-width: 30%;">
+                                        <source id="lessonData" src="/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${infoI}.mp4" alt="Выберите видео"/>
+                                    </video>
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="bi bi-image me-1"></i> Изменить видео
+                                    </button>
+                                    `;
+                                    lessonContentBlock.children[2].children[1].onclick = (event) => {
+                                        event.preventDefault();
+
+                                        let input = document.createElement('input');
+                                        input.type = 'file';
+                                        input.style.display = 'none';
+
+                                        input.click();
+                                        input.addEventListener('change', async (event) => {
+                                            let lessonContentIndex = infoI;
+                                            let renamedFile = new File([input.files[0]], `lessonContent${lessonContentIndex}.mp4`, {
+                                                type: input.files[0].type,
+                                                lastModified: input.files[0].lastModified,
+                                                lastModifiedDate: input.files[0].lastModifiedDate,
+                                            });
+
+                                            let form = new FormData();
+                                            form.append('path', 'courses');
+                                            form.append('path', editCourseForm.elements['id'].value);
+                                            form.append('path', 'lessons');
+                                            form.append('path', i);
+                                            form.append('file', renamedFile);
+
+                                            let ok = await upsertFile(form);
+                                            if (ok) {
+                                                lessonContentBlock.children[2].children[0].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${lessonContentIndex}.mp4`;
+                                            }
+                                        })
+                                    }
+                                    break;
+                                case 'attachment':
+                                    lessonContentBlock.children[1].children[3].selected = true;
+                                    lessonContentBlock.children[2].innerHTML =
+                                    `
+                                    <input type="file" id="lessonData" class="w-100 h-100 object-fit-cover" style="max-width: 30%;" placholder="Выберите файл"/>
+                                    `;
+                                    break;
+                                default:
+                                    alert("I don't know that type of infoBlock");
+                                    break;
+                            }
+
+                            lessonBody.children[1].appendChild(lessonContentBlock);
+                        })
+                        
+                        break;
+                    case 'test':
+                        lessonBody.innerHTML = 
+                        `
+                        <label class="form-label">ID теста <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="${lesson.testId}" name="lessonTestId" placeholder="Введите ID теста" required>
+                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#testModal">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        `;
+                        let chooseTestIdBtn = lessonBody.children[1].children[1];
+                        chooseTestIdBtn.onclick = (event) => {
+                            event.preventDefault();
+                            inputTestIdBlock = lessonBody.children[1].children[0];
+                            chooseTest();
+                        }
+                        break;
+                    default:
+                        alert("I don't know that type of lesson");
+                        break;
+                }
+                
+                lessonDiv.append(lessonHeaderDiv, lessonTypeDiv, lessonBody);
+                lessonsBlock.appendChild(lessonDiv);
+            });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const createKnowledgeBtn = document.getElementById('createKnowledgeBtn');
+        createKnowledgeBtn.onclick = (event) => {
+            event.preventDefault();
+            let knowledgeBlock = document.getElementById('knowledgeBlock');
+            let knowledgeList = knowledgeBlock.children[1];
+
+            let knowledgeDiv = document.createElement('div');
+            knowledgeDiv.classList = 'p-3 bg-white border rounded mb-2';
+
+            let divRow = document.createElement('div');
+            divRow.classList = 'row knowledge-item';
+
+            let knowledgeHead = document.createElement('div');
+            knowledgeHead.classList = 'col-md-4 mb-2 mb-md-0';
+            knowledgeHead.innerHTML = `<input type="text" class="form-control" name="head" placeholder="Заголовок" required>`;
+
+            let knowledgeBody = document.createElement('div');
+            knowledgeBody.classList = 'col-md-7';
+            knowledgeBody.innerHTML = `<textarea class="form-control" rows="1" name="body" placeholder="Описание" required></textarea>`;
+
+            let knowledgeRemove = document.createElement('div');
+            knowledgeRemove.classList = 'col-md-1 d-flex align-items-center';
+            let knowledgeRemoveBtn = document.createElement('button');
+            knowledgeRemoveBtn.classList = 'btn btn-sm btn-outline-danger w-100';
+            knowledgeRemoveBtn.innerHTML = `<i class="bi bi-trash"></i>`;
+            knowledgeRemoveBtn.onclick = (event) => {
+                event.preventDefault();
+                knowledgeDiv.remove();
+            }                
+                
+            knowledgeRemove.appendChild(knowledgeRemoveBtn);
+            divRow.append(knowledgeHead, knowledgeBody, knowledgeRemove);
+            knowledgeDiv.appendChild(divRow);
+            knowledgeList.appendChild(knowledgeDiv);
+        }
+
+        let newInstrumentCounter = 0;
+
+        const createInstrumentBtn = document.getElementById('createInstrumentBtn');
+        createInstrumentBtn.onclick = (event) => {
+            newInstrumentCounter = document.querySelectorAll('.instrument-item').length;
+
+            event.preventDefault();
+            let forComfortBlockContent = document.getElementById('forComfortBlock').children[1];
+
+            let instrumentDiv = document.createElement('div');
+            instrumentDiv.classList = 'p-3 bg-white border rounded mb-2';
+
+            let divRow = document.createElement('div');
+            divRow.classList = 'row instrument-item align-items-center';
+
+            let instrumentIconDiv = document.createElement('div');
+            instrumentIconDiv.classList = 'col-md-2 mb-2 mb-md-0';
+            
+            let instrumentIconLabel = document.createElement('label');
+            instrumentIconLabel.classList = 'text-center p-2 border rounded d-block clickable';
+            instrumentIconLabel.htmlFor = `icon-upload-${newInstrumentCounter}`;
+            instrumentIconLabel.innerHTML =
+            `
+            <img id="icon-preview" src="" alt="Preview" style="max-width: 100%; object-fit: contain;" class="d-none">
+            <i id="icon-default" class="bi bi-filetype-html fs-2"></i>
+            `;
+
+            let instrumentIconInput = document.createElement('input');
+            instrumentIconInput.style = 'display: none;';
+            instrumentIconInput.type = 'file';
+            instrumentIconInput.id = `icon-upload-${newInstrumentCounter}`;
+            instrumentIconInput.accept = 'image/*';
+
+            instrumentIconInput.addEventListener('change', async (event) => {
+                let file = event.target.files[0];
+                if (!file) return;
+                instrumentIconLabel.children[0].classList.remove('d-none');
+                instrumentIconLabel.children[1].classList.add('d-none');
+
+                let renamedFile = new File([event.target.files[0]], `icon${newInstrumentCounter}.png`, {
+                    type: event.target.files[0].type,
+                    lastModified: event.target.files[0].lastModified,
+                    lastModifiedDate: event.target.files[0].lastModifiedDate,
+                });
+
+                let form = new FormData();
+                form.append('path', 'courses');
+                form.append('path', editCourseForm.elements['id'].value);
+                form.append('path', 'instruments');
+                form.append('file', renamedFile);
+
+                let ok = await upsertFile(form);
+                if (ok) {
+                    instrumentIconLabel.children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/instruments/icon${newInstrumentCounter}.png`;
+                    instrumentIconLabel.children[0].classList.remove('d-none');
+                }
+            });
+
+            instrumentIconDiv.append(instrumentIconLabel, instrumentIconInput);
+
+            let instrumentMain = document.createElement('div');
+            instrumentMain.classList = 'col-md-9';
+            instrumentMain.innerHTML = `
+            <div class="row">
+                <input type="text" class="form-control" name="text" placeholder="Название инструмента" required>
+            </div>
+            `;
+
+            let instrumentRemove = document.createElement('div');
+            instrumentRemove.classList = 'col-md-1 d-flex align-items-center';
+            let instrumentRemoveBtn = document.createElement('button');
+            instrumentRemoveBtn.classList = 'btn btn-sm btn-outline-danger w-100';
+            instrumentRemoveBtn.innerHTML = `<i class="bi bi-trash"></i>`;
+            instrumentRemoveBtn.onclick = (event) => {
+                event.preventDefault();
+                instrumentDiv.remove();
+            }
+
+            instrumentRemove.appendChild(instrumentRemoveBtn);
+            divRow.append(instrumentIconDiv, instrumentMain, instrumentRemove);
+            instrumentDiv.appendChild(divRow);
+            forComfortBlockContent.appendChild(instrumentDiv);
+            newInstrumentCounter++;
+        }
+
+        const createFaqBtn = document.getElementById('createFaqBtn');
+        createFaqBtn.onclick = (event) => {
+            event.preventDefault();
+            let faqBlockContent = document.getElementById('faqBlock').children[1];
+
+            let faqDiv = document.createElement('div');
+            faqDiv.classList = 'p-3 bg-white border rounded mb-2 faq-item';
+
+            let questionDiv = document.createElement('div');
+            questionDiv.classList = 'mb-2';
+            questionDiv.innerHTML = 
+            `
+            <label class="form-label">Вопрос</label>
+            <input type="text" class="form-control" name="question" required>
+            `
+
+            let answerDiv = document.createElement('div');
+            answerDiv.innerHTML = 
+            `
+            <label class="form-label">Ответ</label>
+            <textarea class="form-control" name="answer" rows="2" required></textarea>
+            `
+
+            let removeBtn = document.createElement('button');
+            removeBtn.classList = 'btn btn-sm btn-outline-danger mt-2';
+            removeBtn.innerHTML = `<i class="bi bi-trash me-1"></i> Удалить вопрос`;
+            removeBtn.onclick = (event) => {
+                event.preventDefault();
+                faqDiv.remove();
+            }
+
+            faqDiv.append(questionDiv, answerDiv, removeBtn);
+            faqBlockContent.appendChild(faqDiv);
+        }
+
+        const createLessonBtn = document.getElementById('createLessonBtn');
+        createLessonBtn.onclick = (event) => {
+            event.preventDefault();
+
+            let lessonsBlock = document.getElementById('lessonsBlock');
+
+            let lessonDiv = document.createElement('div');
+            lessonDiv.classList = 'dynamic-fields-group mb-4 lesson-item';
+
+            let lessonHeaderDiv = document.createElement('div');
+            lessonHeaderDiv.classList = 'd-flex justify-content-between align-items-start mb-2';
+                
+            let lessonHeaderH = document.createElement('h3');
+            lessonHeaderH.classList = 'h6 mb-0';
+            lessonHeaderH.innerText = `Новый урок`;
+            let lessonHeaderB = document.createElement('div');
+            lessonHeaderB.classList = 'd-flex gap-2';
+            let lessonRemoveBtn = document.createElement('button');
+            lessonRemoveBtn.classList = 'btn btn-sm btn-outline-danger';
+            lessonRemoveBtn.innerHTML = `<i class="bi bi-trash"></i> Удалить`;
+            lessonRemoveBtn.onclick = (event) => {
+                event.preventDefault();
+                lessonDiv.remove();
+            }
+                
+            lessonHeaderB.appendChild(lessonRemoveBtn);
+            lessonHeaderDiv.append(lessonHeaderH, lessonHeaderB);
+
+            let lessonTypeDiv = document.createElement('div');
+            lessonTypeDiv.classList = 'row mb-3';
+
+            let lessonTypeDivSmaller = document.createElement('div');
+            lessonTypeDivSmaller.classList = 'col-md-6';
+                
+            let lessonTypeLabel = document.createElement('label');
+            lessonTypeLabel.classList = 'form-label';
+            lessonTypeLabel.innerHTML = `Тип урока <span class=\"text-danger\">*</span>`;
+
+            let lessonTypeSelect = document.createElement('select');
+            lessonTypeSelect.classList = 'form-select';
+            lessonTypeSelect.name = 'lessonType';
+                
+            let optionInfo = document.createElement('option');
+            optionInfo.value = 'info';
+            optionInfo.textContent = 'Информация';
+
+            let optionTest = document.createElement('option');
+            optionTest.value = 'test';
+            optionTest.textContent = 'Тест';
+
+            optionInfo.selected = true;
+
+            lessonTypeSelect.append(optionInfo, optionTest);
+            lessonTypeSelect.addEventListener('change', (event) => {
+                event.preventDefault();
+                changeLessonType(event.target);
+            })
+
+            lessonTypeDivSmaller.append(lessonTypeLabel, lessonTypeSelect);
+            lessonTypeDiv.appendChild(lessonTypeDivSmaller);
+
+            let lessonBody = document.createElement('div');
+            lessonBody.classList = 'mb-3';
 
 
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+            lessonBody.innerHTML = 
+            `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <label class="form-label">Контент урока <span class="text-danger">*</span></label>
+                <button class="btn btn-sm btn-outline-success">
+                    <i class="bi bi-plus-circle me-1"></i> Добавить блок контента
+                </button>
+            </div>
+            <div id="lesson-content">
+            </div>
+            `;
+
+            lessonBody.children[0].children[1].onclick = (event) => {
+                event.preventDefault();
+                let lessonContentBlock = document.createElement('div');
+                lessonContentBlock.classList = 'mb-2 lesson-content-item';
+                lessonContentBlock.innerHTML =
+                `
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <label class="form-label">Тип контента <span class="text-danger">*</span></label>
+                    <button class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </button>
+                </div>
+                <select class="form-select" name="lessonContentType">
+                        <option value="text" selected>Текст</option>
+                        <option value="image">Картинка</option>
+                        <option value="video">Видео</option>
+                        <option value="attachment">Файл</option>
+                </select>
+                <div>
+                    <textarea class="form-control" rows="3" name="lessonData" placeholder="Введите текст блока контента..." required></textarea>
+                </div>
+                `;
+
+                lessonContentBlock.children[0].children[1].onclick = (event) => {
+                    event.preventDefault();
+                    lessonContentBlock.remove();
+                }
+
+                lessonContentBlock.children[1].addEventListener('change', (event) => {
+                    event.preventDefault();
+                    changeLessonContentType(event.target);
+                })
+
+                lessonBody.children[1].appendChild(lessonContentBlock);
+            }
+                
+            lessonDiv.append(lessonHeaderDiv, lessonTypeDiv, lessonBody);
+            lessonsBlock.appendChild(lessonDiv);
+        }
+
+        function changeLessonType(selectBlock) {
+            let lessonContent = selectBlock.parentElement.parentElement.parentElement.children[2];
+
+            if (selectBlock.value === 'info') {
+                lessonContent.innerHTML =
+                `
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <label class="form-label">Контент урока <span class="text-danger">*</span></label>
+                    <button class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-plus-circle me-1"></i> Добавить блок контента
+                    </button>
+                </div>
+                <div id="lesson-content">
+                </div>
+                `;
+
+                lessonContent.children[0].children[1].onclick = (event) => {
+                    event.preventDefault();
+                    let lessonContentBlock = document.createElement('div');
+                    lessonContentBlock.classList = 'mb-2 lesson-content-item';
+                    lessonContentBlock.innerHTML =
+                    `
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <label class="form-label">Тип контента <span class="text-danger">*</span></label>
+                        <button class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Удалить
+                        </button>
+                    </div>
+                    <select class="form-select" name="lessonContentType">
+                        <option value="text" selected>Текст</option>
+                        <option value="image">Картинка</option>
+                        <option value="video">Видео</option>
+                        <option value="attachment">Файл</option>
+                    </select>
+                    <div>
+                        <textarea class="form-control" rows="3" name="lessonData" placeholder="Введите текст блока контента..." required></textarea>
+                    </div>
+                    `;
+
+                    lessonContentBlock.children[0].children[1].onclick = (event) => {
+                        event.preventDefault();
+                        lessonContentBlock.remove();
+                    }
+
+                    lessonContentBlock.children[1].addEventListener('change', (event) => {
+                        event.preventDefault();
+                        changeLessonContentType(event.target);
+                    })
+
+                    lessonContent.children[1].appendChild(lessonContentBlock);
+                }
+            } else {
+                lessonContent.innerHTML = 
+                `
+                <label class="form-label">ID теста <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="lessonTestId" placeholder="Введите ID теста" required>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#testModal">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                `;
+                let chooseTestIdBtn = lessonContent.children[1].children[1];
+                chooseTestIdBtn.onclick = (event) => {
+                    event.preventDefault();
+                    inputTestIdBlock = lessonContent.children[1].children[0];
+                    chooseTest();
+                }
+            }
+        }
+
+        function changeLessonContentType(selectBlock) {
+            let lessonContentItem = selectBlock.parentElement.children[2];
+
+            switch (selectBlock.value) {
+                case 'text':
+                    lessonContentItem.innerHTML =
+                    `
+                    <textarea class="form-control" rows="3" name="lessonData" placeholder="Введите текст блока контента..." required></textarea>
+                    `;
+                    break;
+                case 'image':
+                    lessonContentItem.innerHTML =
+                    `
+                    <img id="lessonData" src="" class="w-100 h-100 object-fit-cover" style="max-width: 30%;" alt="Выберите изображение">
+                    <button class="btn btn-outline-secondary">
+                        <i class="bi bi-image me-1"></i> Изменить изображение
+                    </button>
+                    `;
+                    lessonContentItem.children[1].onclick = (event) => {
+                        event.preventDefault();
+
+                        let input = document.createElement('input');
+                        input.type = 'file';
+                        input.style.display = 'none';
+
+                        input.click();
+                        input.addEventListener('change', async (event) => {
+                            let lessonContentIndex = Array.from(selectBlock.parentElement.parentElement.querySelectorAll('.lesson-content-item')).indexOf(selectBlock.parentElement);
+                            let renamedFile = new File([input.files[0]], `lessonContent${lessonContentIndex}.png`, {
+                                type: input.files[0].type,
+                                lastModified: input.files[0].lastModified,
+                                lastModifiedDate: input.files[0].lastModifiedDate,
+                            });
+
+                            lessonItemIndex = Array.from(document.querySelectorAll('.lesson-item')).indexOf(selectBlock.parentElement.parentElement.parentElement.parentElement)
+
+                            let form = new FormData();
+                            form.append('path', 'courses');
+                            form.append('path', editCourseForm.elements['id'].value);
+                            form.append('path', 'lessons');
+                            form.append('path', lessonItemIndex);
+                            form.append('file', renamedFile);
+
+                            let ok = await upsertFile(form);
+                            if (ok) {
+                                selectBlock.parentElement.children[2].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${lessonItemIndex}/lessonContent${lessonContentIndex}.png`;
+                            }
+                        })
+                    }
+                    break;
+                case 'video':
+                    lessonContentItem.innerHTML =
+                    `
+                    <video controls class="w-100 h-100 object-fit-cover" style="max-width: 30%;">
+                        <source id="lessonData" src="" alt="Выберите видео"/>
+                    </video>
+                    <button class="btn btn-outline-secondary">
+                        <i class="bi bi-image me-1"></i> Изменить видео
+                    </button>
+                    `;
+                    lessonContentItem.children[1].onclick = (event) => {
+                        event.preventDefault();
+
+                        let input = document.createElement('input');
+                        input.type = 'file';
+                        input.style.display = 'none';
+
+                        input.click();
+                        input.addEventListener('change', async (event) => {
+                            let lessonContentIndex = Array.from(selectBlock.parentElement.parentElement.querySelectorAll('.lesson-content-item')).indexOf(selectBlock.parentElement);
+                            let renamedFile = new File([input.files[0]], `lessonContent${lessonContentIndex}.mp4`, {
+                                type: input.files[0].type,
+                                lastModified: input.files[0].lastModified,
+                                lastModifiedDate: input.files[0].lastModifiedDate,
+                            });
+
+                            lessonItemIndex = Array.from(document.querySelectorAll('.lesson-item')).indexOf(selectBlock.parentElement.parentElement.parentElement.parentElement)
+
+                            let form = new FormData();
+                            form.append('path', 'courses');
+                            form.append('path', editCourseForm.elements['id'].value);
+                            form.append('path', 'lessons');
+                            form.append('path', lessonItemIndex);
+                            form.append('file', renamedFile);
+
+                            let ok = await upsertFile(form);
+                            if (ok) {
+                                selectBlock.parentElement.children[2].children[0].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${lessonItemIndex}/lessonContent${lessonContentIndex}.mp4`;
+                            }
+                        })
+                    }
+                    break;
+                case 'attachment':
+                    lessonContentItem.innerHTML =
+                    `
+                    <input type="file" id="lessonData" class="w-100 h-100 object-fit-cover" style="max-width: 30%;" placholder="Выберите файл"/>
+                    `;
+                    break;
+                default:
+                    alert('Unknown type selected');
+                    break;
+            }
+        }
+
+        let inputTestIdBlock;
+
+        async function chooseTest() {
+            tests = await getTests();
+            if (tests === undefined || tests === null || tests.length === 0) {
+
+                return;
+            }
+            createTestModalTable(tests);
+        }
+
+        const modalTestList = document.getElementById('modalTestList');
+        modalTestList.parentElement.children[2].children[1].onclick = (event) => {
+            event.preventDefault();
+            document.querySelector('button[data-bs-dismiss="modal"]').click();
+            createTestBtn.click();
+        }
+
+        function createTestModalTable(tests) {
+            let mainTableDiv = document.createElement('div');
+            modalTestList.innerHTML = ``;
+
+            mainTableDiv.classList = 'table-responsive';
+            mainTableDiv.innerHTML = `
+            <table class="table table-hover" id="modalTestsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            `;
+            modalTestList.appendChild(mainTableDiv);
+
+            tests.forEach(test => {
+                addTestInModalTable(test);
+            });
+        }
+
+        function addTestInModalTable(test) {
+            let tbody = document.getElementById('modalTestsTable').children[1];
+            if (tbody === undefined) {
+                modalTestList.removeChild(modalTestList.children[1]);
+                createTestModalTable([test]);
+                return
+            }
+            
+            tr = createTestModalRow(test);
+            tbody.appendChild(tr);
+        }
+
+        function updateTestModalRow(id, newTest) {
+            let tbody = document.getElementById('modalTestsTable').children[1];
+            let targetRow = tbody.querySelector(`tr[data-id="${id}"]`);
+
+            newRow = createTestModalRow(newTest);
+            tbody.replaceChild(newRow, targetRow);
+        }
+
+        function createTestModalRow(test) {
+            let tr = document.createElement('tr');
+
+            let tdId = document.createElement('td');
+            tdId.innerText = test.id;
+            let tdTitle = document.createElement('td');
+            tdTitle.innerText = test.title;
+            let tdActions = document.createElement('td');
+            let actionsDiv = document.createElement('div');
+            actionsDiv.classList = 'd-flex gap-1 justify-content-center';
+
+            let editTest = document.createElement('button');
+            editTest.id = 'editTestBtn';
+            editTest.classList = 'btn btn-sm btn-outline-primary';
+            editTest.title = 'Просмотреть';
+            editTest.innerHTML = `<i class="bi bi-eye me-2"></i>Просмотреть`;
+            editTest.onclick = () => {
+                document.querySelector('button[data-bs-dismiss="modal"]').click();
+                openEditTestPage(test.id);
+            }
+
+            let chooseTest = document.createElement('button');
+            chooseTest.id = 'chooseTestBtn';
+
+            chooseTest.classList = 'btn btn-sm btn-outline-primary';
+            chooseTest.title = 'Выбрать';
+            // chooseTest.innerHTML = `<i class="bi bi-trash me-2"></i>Выбрать`;
+            chooseTest.innerText = 'Выбрать';
+
+            chooseTest.onclick = () => {
+                inputTestIdBlock.value = test.id;
+                document.querySelector('button[data-bs-dismiss="modal"]').click();
+            }
+
+            actionsDiv.append(editTest, chooseTest);
+            tdActions.appendChild(actionsDiv);
+            tr.append(tdId, tdTitle, tdActions);
+            tr.setAttribute('data-id', test.id);
+            return tr;
+        }
+
+        const changeCoverBtn = document.getElementById("changeCoverBtn");
+        changeCoverBtn.onclick = (event) => {
+            event.preventDefault();
+
+            let input = document.createElement('input');
+            input.type = 'file';
+            input.style.display = 'none';
+
+            input.click();
+            input.addEventListener('change', async (event) => {
+                let renamedFile = new File([input.files[0]], 'cover.png', {
+                    type: input.files[0].type,
+                    lastModified: input.files[0].lastModified,
+                    lastModifiedDate: input.files[0].lastModifiedDate,
+                });
+
+                let form = new FormData();
+                form.append('path', 'courses');
+                form.append('path', editCourseForm.elements['id'].value);
+                form.append('file', renamedFile);
+
+                let ok = await upsertFile(form);
+                if (ok) {
+                    document.getElementById('courseCover').src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/cover.png`;
+                }
+            })
+        }
+
+        function upsertFile(form) {
+            return fetch("/upsertFileByPath", {
+                method: "POST",
+                body: form
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error upserting file");
+                    return false
+                }
+                return true
+            })
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const editTestForm = document.getElementById('editTestForm');
+
+        let sourceTest;
+        let testForEdit;
+
+        async function openEditTestPage(testId) {
+            sourceTest = await getTestById(testId);
+            console.log(sourceTest);
+
+            testForEdit = sourceTest;
+
+            fillTestMeta(sourceTest);
+            fillTestQuestions(sourceTest);
+
+            document.getElementById('mainPage').classList.add('d-none');
+            document.getElementById('createTest').classList.add('d-none');
+            document.getElementById('editCourse').classList.add('d-none');
+            document.getElementById('editTest').classList.remove('d-none');
+        }
+
+        function getTestById(testId) {
+            let uri = `/getTestById?id=${testId}`;
+            console.log(uri);
+            return fetch(uri, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error get full test");
+                }
+                return response.json();
+            });
+        }
+
+        function fillTestMeta(test) {
+            editTestForm.elements['id'].value = test.id;
+            editTestForm.elements['title'].value = test.title;
+            editTestForm.elements['deleted'].checked = test.deleted;
+        }
+
+        function fillTestQuestions(test) {
+            let testQuestionsBlock = document.getElementById('testQuestions');
+            testQuestionsBlock.innerHTML = ``;
+            test.questions.forEach((question, i) => {
+                let fullQuestionBlock = document.createElement('div');
+                fullQuestionBlock.classList = 'dynamic-fields-group mb-4 test-question-item';
+
+                let questionHeader = document.createElement('div');
+                questionHeader.classList = 'd-flex justify-content-between align-items-start mb-2';
+
+                let questionHeaderH = document.createElement('h3');
+                questionHeaderH.classList = 'h6 mb-0';
+                questionHeaderH.innerText = `Вопрос ${i + 1}`;
+                let questionHeaderDiv = document.createElement('div');
+                questionHeaderDiv.classList = 'd-flex gap-2';
+                let questionHeaderRemoveBtn = document.createElement('button');
+                questionHeaderRemoveBtn.classList = 'btn btn-sm btn-outline-danger';
+                questionHeaderRemoveBtn.innerHTML = `<i class="bi bi-trash"></i> Удалить`;
+                questionHeaderRemoveBtn.onclick = (event) => {
+                    event.preventDefault();
+                    event.target.parentElement.parentElement.parentElement.remove();
+                }
+
+                questionHeaderDiv.appendChild(questionHeaderRemoveBtn);
+                questionHeader.append(questionHeaderH, questionHeaderDiv);
+
+                let questionType = document.createElement('div');
+                questionType.classList = 'row mb-2';
+                let questionTypeSmaller = document.createElement('div');
+                questionTypeSmaller.classList = 'col-md-6';
+                let questionTypeLabel = document.createElement('label');
+                questionTypeLabel.classList = 'form-label';
+                questionTypeLabel.innerText = 'Тип вопроса';
+                let questionTypeSelect = document.createElement('select');
+                questionTypeSelect.classList = 'form-select';
+                questionTypeSelect.name = 'type';
+                let questionTypeOptionChoice = document.createElement('option');
+                questionTypeOptionChoice.value = 'choice';
+                questionTypeOptionChoice.textContent = 'Выбор ответа';
+                let questionTypeOptionInput = document.createElement('option');
+                questionTypeOptionInput.value = 'input';
+                questionTypeOptionInput.textContent = 'Ввод ответа';
+
+                if (question.type === 'choice') questionTypeOptionChoice.selected = true;
+                if (question.type === 'input') questionTypeOptionInput.selected = true;
+
+                questionTypeSelect.append(questionTypeOptionChoice, questionTypeOptionInput);
+                questionTypeSelect.addEventListener('change', (event) => {
+                    changeQuestionType(event.target);
+                })
+                questionTypeSmaller.append(questionTypeLabel, questionTypeSelect);
+                questionType.appendChild(questionTypeSmaller);
+
+                let questionContent = document.createElement('div');
+                questionContent.classList = 'mb-2';
+                questionContent.innerHTML = 
+                `
+                <label class="form-label">Содержание вопроса</label>
+                <textarea class="form-control" rows="3" name="info" placeholder="Введите содержание урока">${question.info}</textarea>
+                `;
+
+                let questionAnswer = document.createElement('div');
+                questionAnswer.classList = 'mb-2';
+
+                switch (question.type) {
+                    case 'input':
+                        questionAnswer.innerHTML = 
+                        `
+                        <label class="form-label">Правильный ответ</label>
+                        <textarea class="form-control" rows="1" name="answer" placeholder="Введите правильный ответ">${question.answer}</textarea>
+                        `
+                        break;
+                    case 'choice':
+                        questionAnswer.innerHTML = 
+                        `
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="h6 mb-0">Ответы</h3>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-plus-circle me-1"></i> Добавить вариант
+                                </button>
+                            </div>
+                        </div>
+                        `;
+                        let addVariantBtn = questionAnswer.children[0].children[1].children[0];
+                        addVariantBtn.onclick = (event) => {
+                            event.preventDefault();
+                            addAnswerVariant(questionAnswer);
+                        }
+
+                        let answers = Array.isArray(question.answer) ? question.answer : (question.answer == null ? [] : [question.answer]);
+                        question.variants.forEach(variant => {
+                            let variantDiv = document.createElement('div');
+                            variantDiv.classList = 'input-group mb-1';
+                            variantDiv.innerHTML = 
+                            `
+                            <div class="input-group mb-1">
+                                <div class="input-group-text">
+                                    <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with checkbox" name="answer" value="${variant.text}">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </button>
+                            </div>
+                            `;
+
+                            let removeVariantBtn = variantDiv.children[0].children[2];
+                            removeVariantBtn.onclick = (event) => {
+                                event.preventDefault();
+                                variantDiv.remove();
+                            }
+
+                            if (answers.includes(variant.text)) {
+                                variantDiv.children[0].children[0].children[0].checked = true;
+                            }
+                            questionAnswer.appendChild(variantDiv);
+                        })
+
+                        break;
+                    default:
+                        alert("I don't know this question type", question.type);
+                        break;
+                }
+
+
+                fullQuestionBlock.append(questionHeader, questionType, questionContent, questionAnswer);
+                testQuestionsBlock.appendChild(fullQuestionBlock);
+            });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        const createQuestionBtn = document.getElementById('createQuestionBtn');
+        createQuestionBtn.onclick = (event) => {
+            event.preventDefault();
+            let questionsBlock = document.getElementById('testQuestions');
+
+            let fullQuestionBlock = document.createElement('div');
+            fullQuestionBlock.classList = 'dynamic-fields-group mb-4 test-question-item';
+
+            let questionHeader = document.createElement('div');
+            questionHeader.classList = 'd-flex justify-content-between align-items-start mb-2';
+
+            let questionHeaderH = document.createElement('h3');
+            questionHeaderH.classList = 'h6 mb-0';
+            questionHeaderH.innerText = `Новый вопрос`;
+            let questionHeaderDiv = document.createElement('div');
+            questionHeaderDiv.classList = 'd-flex gap-2';
+            let questionHeaderRemoveBtn = document.createElement('button');
+            questionHeaderRemoveBtn.classList = 'btn btn-sm btn-outline-danger';
+            questionHeaderRemoveBtn.innerHTML = `<i class="bi bi-trash"></i> Удалить`;
+            questionHeaderRemoveBtn.onclick = (event) => {
+                event.preventDefault();
+                event.target.parentElement.parentElement.parentElement.remove();
+            }
+
+            questionHeaderDiv.appendChild(questionHeaderRemoveBtn);
+            questionHeader.append(questionHeaderH, questionHeaderDiv);
+
+            let questionType = document.createElement('div');
+            questionType.classList = 'row mb-2';
+            let questionTypeSmaller = document.createElement('div');
+            questionTypeSmaller.classList = 'col-md-6';
+            let questionTypeLabel = document.createElement('label');
+            questionTypeLabel.classList = 'form-label';
+            questionTypeLabel.innerText = 'Тип вопроса';
+            let questionTypeSelect = document.createElement('select');
+            questionTypeSelect.classList = 'form-select';
+            questionTypeSelect.name = 'type';
+            let questionTypeOptionChoice = document.createElement('option');
+            questionTypeOptionChoice.value = 'choice';
+            questionTypeOptionChoice.textContent = 'Выбор ответа';
+            let questionTypeOptionInput = document.createElement('option');
+            questionTypeOptionInput.value = 'input';
+            questionTypeOptionInput.textContent = 'Ввод ответа';
+            questionTypeOptionInput.selected = true;
+
+            questionTypeSelect.append(questionTypeOptionChoice, questionTypeOptionInput);
+            questionTypeSelect.addEventListener('change', (event) => {
+                changeQuestionType(event.target);
+            })
+
+            questionTypeSmaller.append(questionTypeLabel, questionTypeSelect);
+            questionType.appendChild(questionTypeSmaller);
+
+            let questionContent = document.createElement('div');
+            questionContent.classList = 'mb-2';
+            questionContent.innerHTML = 
+            `
+            <label class="form-label">Содержание вопроса</label>
+            <textarea class="form-control" rows="3" name="info" placeholder="Введите содержание урока"></textarea>
+            `;
+
+            let questionAnswer = document.createElement('div');
+            questionAnswer.classList = 'mb-2';
+
+            questionAnswer.innerHTML = 
+            `
+            <label class="form-label">Правильный ответ</label>
+            <textarea class="form-control" rows="1" name="answer" placeholder="Введите правильный ответ"></textarea>
+            `;
+            
+
+            fullQuestionBlock.append(questionHeader, questionType, questionContent, questionAnswer);
+            questionsBlock.appendChild(fullQuestionBlock);
+        }
+
+        function changeQuestionType(selectBlock) {
+            let questionAnswer = selectBlock.parentElement.parentElement.parentElement.children[3];
+            if (selectBlock.value !== 'choice') {
+                questionAnswer.innerHTML =
+                `
+                <label class="form-label">Правильный ответ</label>
+                <textarea class="form-control" rows="1" name="answer" placeholder="Введите правильный ответ"></textarea>
+                `;
+            } else {
+                questionAnswer.innerHTML = 
+                `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="h6 mb-0">Ответы</h3>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-plus-circle me-1"></i> Добавить вариант
+                        </button>
+                    </div>
+                </div>
+                `;
+                let addVariantBtn = questionAnswer.children[0].children[1].children[0];
+                addVariantBtn.onclick = (event) => {
+                    event.preventDefault();
+                    addAnswerVariant(questionAnswer);
+                }
+            }
+        }
+
+        function addAnswerVariant(answersBlock) {
+            let variantDiv = document.createElement('div');
+            variantDiv.classList = 'input-group mb-1';
+            variantDiv.innerHTML = 
+            `
+            <div class="input-group mb-1">
+                <div class="input-group-text">
+                    <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                </div>
+                <input type="text" class="form-control" aria-label="Text input with checkbox" name="answer">
+                <button class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </button>
+            </div>
+            `;
+
+            let removeVariantBtn = variantDiv.children[0].children[2];
+            removeVariantBtn.onclick = (event) => {
+                event.preventDefault();
+                variantDiv.remove();
+            }
+
+            answersBlock.appendChild(variantDiv);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        editCourseForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            let shortCard = {};
+
+            if (editCourseForm.elements['description'].value !== '') shortCard.description = editCourseForm.elements['description'].value;
+            if (editCourseForm.elements['city'].value !== '') shortCard.city = editCourseForm.elements['city'].value;
+            if (editCourseForm.elements['time'].value !== '') shortCard.time = editCourseForm.elements['time'].value;
+            if (editCourseForm.elements['type'].value !== '') shortCard.type = editCourseForm.elements['type'].value;
+            if (document.getElementById('courseCover').src !== '') {
+                let imgSrc = document.getElementById('courseCover').getAttribute('src');
+                shortCard.cover = imgSrc.substring(imgSrc.indexOf('path=') + 5);
+            }
+
+            let availableMaterial = {};
+            if (editCourseForm.elements['modules'].value !== '') availableMaterial.modules = Number(editCourseForm.elements['modules'].value);
+            if (editCourseForm.elements['theoryHours'].value !== '') availableMaterial.theoryHours = Number(editCourseForm.elements['theoryHours'].value);
+            if (editCourseForm.elements['practiceHours'].value !== '') availableMaterial.practiceHours = Number(editCourseForm.elements['practiceHours'].value);
+            if (editCourseForm.elements['weeks'].value !== '') availableMaterial.weeks = Number(editCourseForm.elements['weeks'].value);
+
+            let knowledgeBlock = {};
+            if (editCourseForm.elements['knowledgeBlockHeader'].value !== '') knowledgeBlock.header = editCourseForm.elements['knowledgeBlockHeader'].value;
+            knowledge = collectKnowledgeBlock();
+            if (knowledge.length !== 0) knowledgeBlock.knowledge = knowledge;
+
+            let forComfortBlock = {};
+            if (editCourseForm.elements['comfortBlockHeader'].value !== '') forComfortBlock.head = editCourseForm.elements['comfortBlockHeader'].value;
+            instruments = collectForComfortBlock();
+            if (instruments.length !== 0) forComfortBlock.instruments = instruments;
+
+            let fullCard = {};
+            if (editCourseForm.elements['headDescription'].value !== '') fullCard.headDescription = editCourseForm.elements['headDescription'].value;
+            if (editCourseForm.elements['educationForm'].value !== '') fullCard.educationForm = editCourseForm.elements['educationForm'].value;
+            if (editCourseForm.elements['endDocument'].value !== '') fullCard.endDocument = editCourseForm.elements['endDocument'].value;
+            fullCard.availableMaterial = availableMaterial;
+            fullCard.knowledgeBlock = knowledgeBlock;
+            fullCard.forComfortBlock = forComfortBlock;
+            faq = collectFaqBlock();
+            if (faq.length !== 0) fullCard.faq = faq;
+
+            let courseMetaObj = {};
+            courseMetaObj.id = editCourseForm.elements['id'].value;
+            courseMetaObj.title = editCourseForm.elements['title'].value;
+            if (editCourseForm.elements['author'].value !== '') courseMetaObj.author = editCourseForm.elements['author'].value;
+            courseMetaObj.shown = editCourseForm.elements['shown'].checked;
+            if (editCourseForm.elements['deleted'].checked) courseMetaObj.deleted = editCourseForm.elements['deleted'].checked;
+            courseMetaObj.shortCard = shortCard;
+            courseMetaObj.fullCard = fullCard;
+
+            let courseLessonsObj = {}
+            courseLessonsObj.courseId = editCourseForm.elements['id'].value;
+            lessons = collectLessonsBlock();
+            if (lessons.length !== 0) courseLessonsObj.lessons = lessons;
+
+            console.log(courseMetaObj);
+            console.log(courseLessonsObj);
+
+            if (updateCourseLessons(courseLessonsObj)) {
+                updateCourseMeta(courseMetaObj);
+            } else {
+                alert("Error updating courseLessons");
+            };
+        })
+
+        function collectKnowledgeBlock() {
+            const knowledgeItems = document.querySelectorAll('.knowledge-item');
+
+            let knowledge = [];
+
+            knowledgeItems.forEach(item => {
+                let knowledgeHead = item.querySelector('input[name="head"]').value;
+                let knowledgeBody = item.querySelector('textarea[name="body"]').value;
+
+                knowledge.push({
+                    head: knowledgeHead,
+                    body: knowledgeBody
+                });
+            })
+
+            return knowledge;
+        }
+
+        function collectForComfortBlock() {
+            const comfortBlockItems = document.querySelectorAll('.instrument-item');
+
+            let instrument = [];
+
+            comfortBlockItems.forEach(item => {
+                let imgSrc = item.children[0].children[0].children[0].getAttribute('src');
+                let instrumentIcon = imgSrc.substring(imgSrc.indexOf('path=') + 5);
+                let instrumentText = item.querySelector('input[name="text"]').value;
+
+                instrument.push({
+                    icon: instrumentIcon,
+                    text: instrumentText
+                });
+            })
+
+            return instrument;
+        }
+        
+        function collectFaqBlock() {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            let faq = [];
+
+            faqItems.forEach(item => {
+                let faqQuestion = item.querySelector('input[name="question"]').value;
+                let faqAnswer = item.querySelector('textarea[name="answer"]').value;
+
+                faq.push({
+                    question: faqQuestion,
+                    answer: faqAnswer,
+                });
+            })
+
+            return faq;
+        }
+
+        function collectLessonsBlock() {
+            const lessonsItems = document.querySelectorAll('.lesson-item');
+
+            let lessons = [];
+
+            lessonsItems.forEach((item, lessonItemIndex) => {
+                let lesson = {
+                    courseId: editCourseForm.elements['id'].value
+                };
+                lesson.type = item.querySelector('select[name="lessonType"]').value;
+                
+                if (lesson.type === 'info') {
+                    let info = [];
+
+                    let contentItems = item.querySelectorAll('.lesson-content-item');
+                    contentItems.forEach(async (content, lessonContentIndex) => {
+                        let contentType = content.children[1].value;
+                        let contentData;
+                        switch (contentType) {
+                            case 'text':
+                                contentData = content.querySelector('textarea[name="lessonData"]').value;
+                                break;
+                            case 'image':
+                                let imgSrc = content.querySelector('img[id="lessonData"]').getAttribute('src');
+                                contentData = imgSrc.substring(imgSrc.indexOf('path=') + 5);
+                                break;
+                            case 'video':
+                                let videoSrc = content.querySelector('source[id="lessonData"]').getAttribute('src');
+                                contentData = videoSrc.substring(videoSrc.indexOf('path=') + 5);
+                                break;
+                            case 'attachment':
+                                let file = content.querySelector('input[id="lessonData"]').files[0];
+
+                                let form = new FormData();
+                                form.append('path', 'courses');
+                                form.append('path', editCourseForm.elements['id'].value);
+                                form.append('path', 'lessons');
+                                form.append('path', lessonItemIndex);
+                                form.append('file', file);
+
+                                let ok = await upsertFile(form);
+                                if (ok) {
+                                    // selectBlock.parentElement.children[2].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${lessonItemIndex}/lessonContent${lessonContentIndex}.png`;
+                                }
+                                break;
+                            default:
+                                alert('Unknown contentType was selected');
+                                break;
+                        }
+
+                        info.push({
+                            type: contentType,
+                            data: contentData,
+                        });
+                    });
+
+                    lesson.info = info;
+                } else {
+                    lesson.testId = item.querySelector('input[name="lessonTestId"]').value;
+                }
+                
+                lessons.push(lesson);
+                console.log(lessons);
+            })
+
+            return lessons;
+        }
+
+        function updateCourseLessons(courseLessons) {
+            return fetch("/updateCourse", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(courseLessons)
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error update courseLesson");
+                    return false;
+                }
+                return true;
+            })
+        }
+
+        function updateCourseMeta(courseMeta) {
+            return fetch("/updateFullCourseMeta", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(courseMeta)
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error update courseMeta");
+                    return false;
+                }
+                alert("SUCCESSFULLY");
+                return true;
+            })
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        editTestForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const questionsItems = document.querySelectorAll('.test-question-item');
+
+            let questions = [];
+
+            questionsItems.forEach(item => {
+                let questionType = item.querySelector('select[name="type"]').value;
+                let questionInfo = item.querySelector('textarea[name="info"]').value;
+                let questionAnswers = [];
+                let questionVariants = [];
+
+                if (questionType === 'input') {
+                    questionAnswers = item.querySelector('textarea[name="answer"]').value;
+                } else {
+                    let variants = item.querySelectorAll('input[name="answer"]');
+                    variants.forEach(variant => {
+                        questionVariants.push({"text": variant.value});
+
+                        if (variant.parentElement.children[0].children[0].checked) {
+                            questionAnswers.push(variant.value);
+                        }
+                    });
+                }
+
+                questions.push({
+                    type: questionType,
+                    info: questionInfo,
+                    variants: questionVariants.length === 0 ? null : questionVariants,
+                    answer: questionAnswers
+                });
+            })
+
+            let testObj = {
+                id: editTestForm.elements['id'].value,
+                title: editTestForm.elements['title'].value,
+                deleted: editTestForm.elements['deleted'].checked,
+                questions: questions
+            };
+
+            console.log(testObj);
+            updateTest(testObj);
+        })
+
+        function updateTest(test) {
+            return fetch("/updateTest", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(test)
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error update test");
+                    return false;
+                }
+                alert("SUCCESSFULLY");
+                return true;
+            })
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+    </script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
 </body>

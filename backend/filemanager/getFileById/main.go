@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
+	"dikobra3/mongoApi"
 
 	"github.com/big-larry/mgo"
 	"github.com/okonma-violet/services/universalservice_nonepoll"
 )
 
 type config struct {
-	DBName       string
-	GridFSPrefix string
+	ConnectionString string
 }
 
 type service struct {
@@ -24,11 +24,12 @@ func (c *config) PrepareHandling(ctx context.Context, pubs_getter universalservi
 
 	var err error
 
-	if err = s.initSession(c.DBName, c.GridFSPrefix); err != nil {
+	if s.session, err = mongoApi.Connect(c.ConnectionString); err != nil {
 		return nil, nil, err
 	}
+	s.bucket = s.session.DB("filesharing").GridFS("tmpPrefix")
 
-	if err = s.ensurePathIndex(); err != nil {
+	if err = mongoApi.EnsurePathIndex(s.bucket); err != nil {
 		return nil, nil, err
 	}
 

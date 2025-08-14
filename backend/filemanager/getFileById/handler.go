@@ -1,8 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"io"
 
+	"github.com/big-larry/mgo"
 	"github.com/big-larry/suckhttp"
 	"github.com/okonma-violet/services/logs/logger"
 )
@@ -16,13 +19,17 @@ func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *
 		}
 
 		file, err := s.getFileById(l, id)
-		if err != nil {
+		if errors.Is(err, mgo.ErrNotFound) {
+			response = suckhttp.NewResponse(404, "Not Found")
+			return response, nil
+		} else if err != nil {
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 			return response, err
 		}
 
-		respBytes, err := fileToBytes(l, file)
+		respBytes, err := io.ReadAll(file)
 		if err != nil {
+			l.Error("File To Bytes", err)
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 		} else {
 			response = suckhttp.NewResponse(200, "OK").

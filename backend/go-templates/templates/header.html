@@ -1,0 +1,104 @@
+{{define "header"}}
+
+
+<header class="header" id="main-header">
+  <div class="header__inner">
+    <a href="/neurokids" class="header__logo"> <img src="../picture/logo.webp" class="header__logo" alt="NEUROKIDS"></a>
+
+    <div class="burger" id="burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <nav class="header__nav header__nav--main">
+      {{if .IsAuthorized}}
+      <a href="/neurokids" class="header__item">О наборе</a>
+      <a href="/courses" class="header__item">Обучение</a>
+      <a href="/diagnostic" class="header__item">Диагностический комплекс</a>
+      <a href="/contacts" class="header__item">Контакты</a>
+
+      {{else}}
+
+      <a href="/neurokids" class="header__item">О наборе</a>
+      <a href="/learn" class="header__item">Обучение</a>
+      <a href="/dgComplecs" class="header__item">Диагностический комплекс</a>
+      <a href="/contacts" class="header__item">Контакты</a>
+      {{end}}
+    </nav>
+
+    <nav class="header__nav header__nav--right">
+      {{if .IsAuthorized}}
+      <a href="/chat" class="header-bookmark">
+        <span class="icon-wrapper">
+        </span>
+        <span class="icon icon--messages"></span>
+      </a>
+      <div class="user-menu header-bookmark">
+        <div class="user-name">{{.UserName}}</div>
+        <ul class="dropdown">
+          <li><a href="/setting?tab=main">Настройки</a></li>
+          <li><a href="/setting?tab=dox">Сертификат</a></li>
+          <li><a href="/userList">Пользователи</a></li>
+          <li><a href="/logout">Выход</a></li>
+        </ul>
+      </div>
+      {{else}}
+      <a class="header__item open-login-modal">Войти</a>
+      {{end}}
+    </nav>
+
+  </div>
+
+  <dialog id="mobile-menu" class="mobile-menu">
+    <button id="close-menu" class="close-btn" aria-label="Закрыть меню">Назад</button>
+
+    <nav class="mobile-menu-content">
+      {{if .IsAuthorized}}
+      <a href="/neurokids" class="header__item" id="toggle-submenu-btn" aria-expanded="false" aria-controls="submenu-about">О
+        наборе</a>
+
+      <div id="submenu-about" class="mobile-submenu" aria-hidden="true">
+        <a href="#compound" class="mobile-submenu__item">Состав набора</a>
+        <a href="#school" class="mobile-submenu__item">Детским садам и школам</a>
+        <a href="#dealers" class="mobile-submenu__item">Дилерам</a>
+        <a href="#delivery" class="mobile-submenu__item">Доставка и оплата</a>
+      
+      </div>
+
+      <a href="/courses" class="header__item">Обучение</a>
+      <a href="/diagnostic" class="header__item">Диагностический комплекс</a>
+      <a href="/contacts" class="header__item">Контакты</a>
+      {{else}}
+      <a href="/neurokids" class="header__item" id="toggle-submenu-btn" aria-expanded="false" aria-controls="submenu-about">О
+        наборе</a>
+
+      <div id="submenu-about" class="mobile-submenu" aria-hidden="true">
+        <a href="#compound" class="mobile-submenu__item">Состав набора</a>
+        <a href="#school" class="mobile-submenu__item">Детским садам и школам</a>
+        <a href="#dealers" class="mobile-submenu__item">Дилерам</a>
+        <a href="#delivery" class="mobile-submenu__item">Доставка и оплата</a>
+        <a href="#diagnostics" class="mobile-submenu__item">Диагностический комплекс</a>
+      </div>
+
+      <a href="/learn" class="header__item">Обучение</a>
+      <a href="/dgComplecs" class="header__item">Диагностический комплекс</a>
+      <a href="/contacts" class="header__item">Контакты</a>
+      
+      {{end}}
+
+    </nav>
+  </dialog>
+
+</header>
+
+<div id="subheader" class="subheader" aria-hidden="true">
+  <nav class="subheader__nav">
+    <a href="#compound" class="subheader__item">Состав набора</a>
+    <a href="#school" class="subheader__item">Детским садам и школам</a>
+    <a href="#dealers" class="subheader__item">Дилерам</a>
+    <a href="#delivery" class="subheader__item">Доставка и оплата</a>
+  </nav>
+</div>
+
+{{end}}

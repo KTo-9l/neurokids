@@ -1,0 +1,5 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName filesharing_update_file_path_by_id
+
+ConnectionString mongodb://localhost:27017

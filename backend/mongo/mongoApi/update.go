@@ -29,12 +29,7 @@ func UpdateGridFSById(bucket *mgo.GridFS, id string, file *os.File, path []strin
 
 	objId := bson.ObjectIdHex(id)
 
-	err = bucket.Files.RemoveId(objId)
-	if err != nil {
-		return false, err
-	}
-
-	_, err = bucket.Chunks.RemoveAll(bson.M{"files_id": objId})
+	err = bucket.RemoveId(objId)
 	if err != nil {
 		return false, err
 	}
@@ -54,17 +49,28 @@ func UpdateGridFSByIdFromMultipart(bucket *mgo.GridFS, id string, fileHeader *mu
 
 	objId := bson.ObjectIdHex(id)
 
-	err = bucket.Files.RemoveId(objId)
+	err = bucket.RemoveId(objId)
 	if err != nil {
 		return false, err
 	}
 
-	_, err = bucket.Chunks.RemoveAll(bson.M{"files_id": objId})
-	if err != nil {
-		return false, err
-	}
-
+	path = append(path, fileHeader.Filename)
 	_, err = InsertInGridFSWithIdFromMultipart(bucket, fileHeader, path, objId)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func UpsertGridFSByPathFromMultipart(bucket *mgo.GridFS, fileHeader *multipart.FileHeader, path []string) (ok bool, err error) {
+	path = append(path, fileHeader.Filename)
+	err = bucket.RemovePath(path)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = InsertInGridFSFromMultipart(bucket, fileHeader, path)
 	if err != nil {
 		return false, err
 	}

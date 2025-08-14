@@ -1,0 +1,244 @@
+{{define "title"}} Мессенджер {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel='stylesheet' href='https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css'>
+<link href="../static/css/mes.css" rel="stylesheet" type="text/css">
+<link href="../static/css/common.css" rel="stylesheet" type="text/css">
+<link href="../static/css/main.css" rel="stylesheet" type="text/css">
+<link href="../static/css/icon.css" rel="stylesheet" type="text/css">
+
+{{end}}
+
+
+
+{{block "template" .}}
+
+<template id="chat-message-template">
+
+    <div class="chat-item">
+        <div class="chat-item__body">
+            <span class="chat-item__name">
+                <span class="time"></span>
+            </span>
+            <p class="message-text"></p>
+        </div>
+    </div>
+
+
+</template>
+
+<template id="chat-input-template">
+    <div class="message-input">
+
+        <div class="message-input__area">
+            <div id="file-preview" class="file-preview"></div>
+            <input type="text" placeholder="Написать сообщение" id="msg-input">
+        </div>
+        <div class="message-input__clip">
+            <span class="icon icon-clip clip-link"></span>
+            <div class="clip-menu">
+                <ul>
+                    <li>
+                        <a href="" id="attach-media"><span class="icon icon-image-icon"></span> Фото или видео</a>
+                    </li>
+                    <li>
+                        <a href="" id="attach-files"><span class="icon icon-file"></span> Файл</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <button class="btn btn-green btn-small" id="send">
+            <span class="icon icon-pp-plane white"></span> Отправить
+        </button>
+    </div>
+</template>
+
+<template id="chat-header-template">
+
+    <div class="message__head">
+        <h3 class="chat-title"></h3>
+        <div class="message-links">
+            <a class="link-item search-link">
+                <span class="icon icon-search"></span>
+            </a>
+            <a class="link-item add-link">
+                <span class="icon icon-add-user"></span>
+            </a>
+            <a class="link-item menu-link">
+                <span class="icon icon-dots"></span>
+            </a>
+        </div>
+        <div class="message-menu">
+            <div class="message-menu__head">
+                Управление чатом
+                <a class="close"><img src="../picture/close-icon.svg" alt=""></a>
+            </div>
+            <ul>
+                <li>
+                    <a class = "delete-chat-btn">
+                        <span class="icon icon-close"></span>
+                        <span>  Удалить чат </span>
+                    </a>
+                </li>
+                <li>
+                    <a class="leave-chat-btn">
+                        <span class="icon icon-login"></span>
+                        <span>Покинуть группу</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="search-chat">
+            <div class="search-chat__head">
+                Управление чатом
+                <a class="close"><img src="../picture/close-icon.svg" alt=""></a>
+            </div>
+            <div class="search-input">
+                <input type="text" placeholder="Поиск">
+                <span class="search-chat__clear close">
+                    <span class="icon icon-close"></span>
+                </span>
+                <a class="search-chat__cancel close">Отмена</a>
+            </div>
+        </div>
+    </div>
+
+
+</template>
+
+{{end}}
+
+
+{{block "js" .}}
+<script src="../static/js/messanger.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- <script src="../static/js/owl.carousel.js"></script> -->
+<!-- <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js'></script> -->
+<script src='https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js'></script>
+<!-- <script src="../static/js/scripts.js"></script> -->
+<script src="../static/js/mes_mob.js"></script>
+<script src="../static/js/mobile.js"></script>
+
+
+{{end}}
+
+{{define "chat"}}
+
+<div class="contact-item">
+    <div class="contact-item__body" data-chat-id="{{.Chat.Id.Hex}}" onclick="openChat('{{.Chat.Id.Hex}}')">
+        <div class="contact-item__number">{{ len .Chat.Members }} участников</div>
+        <div class="contact-item__name">{{ .Chat.Title }}</div>
+        <div class="contact-item__text">
+            {{ if .LastMessage }}
+            {{ .LastMessage.Text }}
+            {{ else }}
+            <span>Нет сообщений</span>
+            {{ end }}
+        </div>
+    </div>
+</div>
+
+{{ end }}
+
+
+{{ range .Messages }}
+<div class="chat-item">
+
+    <div class="chat-item__body">
+        <span class="chat-item__name">
+            {{ if eq .From $.SelfID }}Вы{{ else }}Пользователь{{ end }}
+
+            <span>{{ .Time.Format "15:04" }}</span>
+        </span>
+        <p>{{ .Text }}</p>
+
+    </div>
+</div>
+{{ end }}
+
+
+{{ define "content" }}
+
+<section class="message-section gray-bg gray-bg--mobile-white section-top">
+    <div class="container">
+        <div class="message">
+            <div class="message__side">
+                <div class="message__search" style="position: relative;">
+                    <input type="text" placeholder="Поиск">
+                </div>
+                <div class="message__contacts mCustomScrollbar" data-mcs-theme="dark">
+                    {{ range .Chats }}
+                    {{template "chat" .}}
+                    {{ end }}
+                </div>
+                <div class="message__side-bottom">
+                    <a href="#" id="openCreateGroupModal" class="btn btn-green btn-full btn-small">
+                        <span class="icon icon-plus-white"></span>Создать группу
+                    </a>
+                </div>
+            </div>
+            <div class="message__content">
+                <a href="" class="back-link mobile-show flex"><span class="icon icon-back-arrow"></span>Чаты</a>
+
+                <div class="none-chat text20Regular"> Выберите, кому хотели бы написать </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{{block "template" .}} {{end}}
+
+<dialog id="createGroupModal" class="modal">
+    <div class="modal__content">
+        <button class="modal__close" id="closeCreateGroupModal" aria-label="Закрыть">×</button>
+        <h2 class="text30 text--center">СОЗДАТЬ ГРУППУ</h2>
+        <p class="text20Regular text--center">Введите название и добавьте участников</p>
+
+        <form method="dialog" class="modal-consult__form">
+            <input id="groupTitle" type="text" placeholder="Название группы" class="input input--dialog" required>
+
+            <div style="position: relative;">
+                <input id="userSearch" type="text" placeholder="Поиск пользователей..." class="input input--dialog">
+                <div id="searchResults" class="searchRes"></div>
+            </div>
+
+            <h3 class="text17">Участники:</h3>
+            <ul id="selectedUsers" class=""></ul>
+
+            <button type="button" id="createGroupBtn" class="button button--small">
+                <span class="button__text">СОЗДАТЬ БЕСЕДУ</span>
+            </button>
+        </form>
+    </div>
+</dialog>
+
+<dialog id="addUsersModal" class="modal">
+    <div class="modal__content">
+        <button class="modal__close" id="closeAddUsersModal" aria-label="Закрыть">×</button>
+        <h2 class="text30 text--center">Добавить участников</h2>
+
+        <form method="dialog" class="modal-consult__form">
+            <div style="position: relative;">
+                <input id="addUserSearch" type="text" placeholder="Поиск пользователей..." class="input input--dialog">
+                <div id="addUserSearchResults" class="searchRes"></div>
+            </div>
+
+            <h3 class="text17">Участники:</h3>
+            <ul id="addSelectedUsers"></ul>
+
+            <button type="button" id="addUsersBtn" class="button button--small">
+                <span class="button__text">Добавить</span>
+            </button>
+        </form>
+    </div>
+</dialog>
+
+
+
+{{ end }}

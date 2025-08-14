@@ -1,0 +1,130 @@
+{{define "title"}} Контакты {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css" />
+
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/contact.css">
+<link rel="stylesheet" href="../static/css/icon.css">
+{{end}}
+
+{{block "js" .}}
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.7/dist/inputmask.min.js"></script>
+<script src="../static/js/contact.js"></script>
+{{end}}
+
+
+{{block "contacts" .}}
+
+<section id="contacts" class="section section--row">
+            <div class="section__inner">
+                <h2 class="text55 text--center"> <b> НАШИ КОНТАКТЫ </b></h2>
+                <div class="section__inner-colm">
+
+                    <div class="section__contacts">
+                        <h3 class="text30 text30--Meduim text30--margin0 text--center">АДРЕС:</h3>
+                        <div class="text20Medium"> г. Екатеринбург, ул. Машинная 42 "А", оф. 501 (БЦ "Штольц")</div>
+                    </div>
+
+                    <div class="section__contacts">
+                        <h3 class="text30 text30--Meduim text30--margin0 text--center">ТЕЛЕФОН:</h3>
+                        <div>
+                            <div class="text20Medium"> 8 (800) 201-88-08</div>
+                            <div class="text20Medium"> +7 (343) 286-83-59</div>
+                        </div>
+
+                    </div>
+
+                    <div class="section__contacts">
+                        <h3 class="text30 text30--Meduim text30--margin0 text--center">РЕЖИМ РАБОТЫ:</h3>
+                        <div>
+                            <div class="text20Medium"> ПН. – ПТ.: с 9:00 до 18:00</div>
+                            <div class="text20Medium"> СБ.: выходной</div>
+                            <div class="text20Medium"> ВС.: выходной</div>
+                        </div>
+
+                    </div>
+
+                    <div class="section__contacts">
+                        <h3 class="text30 text30--Meduim text30--margin0 text--center">СОТРУДНИЧЕСТВО:</h3>
+                        <div>
+                            <div class="text20Medium"> zakaz-neurokids@yandex.ru</div>
+                            <div class="text20Medium"> zakaz@gk-teremok.ru</div>
+                        </div>
+                        <a href="" class="text25Medium text--green" id="openRekv">РЕКВИЗИТЫ</a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal__content">
+                <h2 class="text30 text--center">ПОЛУЧИТЬ КОНСТУЛЬТАЦИЮ СПЕЦИАЛИСТА</h2>
+                <p class="text17">Заполните форму ниже и мы свяжемся с Вами в ближайшее время</p>
+                <form method="dialog" class="modal-consult__form">
+                    <input id="name-modal" type="text" placeholder="Ваше имя" class="input input--dialog">
+                    <input id="phone-modal" type="tel" placeholder="+7 (___)___-__-__"
+                        class="input phone-input input--dialog">
+                    <input id="email-modal" type="text" placeholder="e-mail" class="input input--dialog">
+                    <input id="com" type="text" placeholder="Комментарий" class="input input--dialog">
+                    <button class="button button--small">
+                        <span class="button__text">ОТПРАВИТЬ</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+{{end}}
+
+{{block "dialog" .}}
+
+<dialog id="rekvModal" class="modal modal-rekv">
+
+    <div class="modal__content">
+        <button class="modal__close" aria-label="Закрыть">&times;</button>
+        <h2 class="text30 text--center">РЕКВИЗИТЫ</h2>
+        <p><b>Полное наименование:</b> Общество с ограниченной ответственностью «ГК ТЕРЕМОК»</p>
+        <p><b>Сокращенное:</b> ООО «ГК ТЕРЕМОК»</p>
+        <p><b>ФИО:</b> Беляев Владимир Анатольевич</p>
+        <p><b>Должность:</b> Директор, действующий на основании Устава</p>
+        <p><b>Юр. адрес:</b> 620089, Россия, Свердловская обл., г. Екатеринбург, ул. Машинная, 42а, этаж 5, офис 501
+        </p>
+        <p><b>Дата регистрации:</b> 22 января 2019 г.</p>
+        <p><b>ОГРН:</b> 1196658003684</p>
+        <p><b>ИНН:</b> 6685158300</p>
+        <p><b>КПП:</b> 668501001</p>
+        <p><b>ОКПО:</b> 35585132</p>
+        <p><b>ОКТМО:</b> 65401000001</p>
+        <p><b>Р/с:</b> 40702810416540057230</p>
+        <p><b>Банк:</b> УРАЛЬСКИЙ БАНК ПАО СБЕРБАНК, г. Екатеринбург</p>
+        <p><b>БИК:</b> 046577674</p>
+        <p><b>Корр. счет:</b> 30101810500000000674</p>
+        <p><b>Телефон:</b> <a href="tel:+73432868359">+7 (343) 286-83-59</a></p>
+        <p><b>E-mail:</b> <a href="mailto:1@gk-teremok.ru">1@gk-teremok.ru</a></p>
+    </div>
+</dialog>
+
+
+
+
+<dialog id="loginModal" class="modal login-modal">
+    <div class="modal__content">
+        <button class="modal__close" aria-label="Закрыть">&times;</button>
+
+        <h2 class="text30 text--center">Вход</h2>
+        <form class="login-form">
+            <input type="text" placeholder="Логин" name="login" class="input input--login">
+            <input type="password" placeholder="Пароль" name="pass" class="input input--login">
+            <div class="login-error" style="color: red; margin-top: 10px; display: none;"></div>
+            <button class="button button--small" type="submit"> <span class="button__text">ВОЙТИ</span></button>
+        </form>
+    </div>
+</dialog>
+
+
+{{end}}
+
+
+{{block "content" .}}
+{{block "contacts" .}} {{end}}
+{{block "dialog" .}} {{end}}
+{{end}}

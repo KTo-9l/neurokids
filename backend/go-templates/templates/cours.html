@@ -1,0 +1,348 @@
+{{define "title"}} {{.Courses.Title}} {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/common.css" rel="stylesheet" type="text/css">
+<link href="../static/css/card.css" rel="stylesheet" type="text/css">
+<link href="../static/css/main.css" rel="stylesheet" type="text/css">
+<link href="../static/css/icon.css" rel="stylesheet" type="text/css">
+<link href="../static/css/test.css" rel="stylesheet" type="text/css">
+{{end}}
+
+{{block "js" .}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="../static/js/owl.carousel.js"></script>
+<script>
+    const correctAnswers = {{ .CorrectAnswers | toJson }};
+</script>
+<script src="../static/js/test.js"></script>
+<script src="../static/js/scripts.js"></script>
+<script src="../static/js/mobile.js"> </script>
+{{end}}
+
+{{block "HeaderCours" .}}
+<div class="welcome bg-gradient">
+
+    <picture>
+        <source srcset="/images/399/{{.ShortCard.Cover}}" media="(max-width: 399px)">
+        <source srcset="/images/599/{{.ShortCard.Cover}}" media="(max-width: 599px)">
+        <source srcset="/images/992/{{.ShortCard.Cover}}" media="(max-width: 992px)">
+        <source srcset="/images/1200/{{.ShortCard.Cover}}" media="(max-width: 1200px)">
+        <source srcset="/images/1200/{{.ShortCard.Cover}}" media="(min-width: 1201px)">
+        <img src="/images/1200/{{.ShortCard.Cover}}" alt="" loading="lazy" decoding="async" class="bg-gradient__image">
+    </picture>
+
+    <div class="container">
+        <div class="welcome__wrapper">
+            <div class="welcome__header">
+                <div class="welcome__title title title--baner">{{.Title}}</div>
+                <div class="welcome__users">
+                    <div class="authors">
+                        <span class="authors__text">{{.Author}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="welcome__body">
+                <div class="welcome__desc move-5">
+                    <p>
+                        {{.FullCard.HeadDescription}}
+                    </p>
+                </div>
+            </div>
+            <div class="welcome__footer">
+                <div class="welcome__row welcome__row--top">
+                    <div class="welcome__params move-3">
+                        <div class="course-patametrs" data-da=".welcome-jogger .welcome-jogger__params,991,first">
+                            <div class="course-patametrs__item">
+                                <div class="course-patametrs__name">Форма обучения</div>
+                                <div class="course-patametrs__value">{{.FullCard.EducationForm}}</div>
+                            </div>
+                            <div class="course-patametrs__item">
+                                <div class="course-patametrs__name">Документ по окончанию</div>
+                                <div class="course-patametrs__value">{{.FullCard.EndDocument}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{block "AvailableMaterial" .}}
+{{if or (ne .FullCard.AvailableMaterial.Modules 0) (ne .FullCard.AvailableMaterial.TheoryHours 0) (ne
+.FullCard.AvailableMaterial.PracticeHours 0) (ne .FullCard.AvailableMaterial.Weeks 0)}}
+<section class="materials gray-bg"> <a id="anchor1" class="anchor"></a>
+
+    <div class="container">
+
+        <div class="materials-content">
+
+            <span class="materials-content__title">
+                Вам будет доступно
+                большое количество
+                обучающего материала
+            </span>
+
+            <div class="materials-content__body">
+
+                {{if ne .FullCard.AvailableMaterial.Modules 0}}
+                <div class="material-item">
+                    <div class="material-item__number">{{.FullCard.AvailableMaterial.Modules}}</div>
+                    <div class="material-item__title">Учебных<br />модулей</div>
+                </div>
+                {{end}}
+
+                {{if ne .FullCard.AvailableMaterial.TheoryHours 0}}
+                <div class="material-item">
+                    <div class="material-item__number">{{.FullCard.AvailableMaterial.TheoryHours}}</div>
+                    <div class="material-item__title">Часов<br />теории</div>
+                </div>
+                {{end}}
+
+                {{if ne .FullCard.AvailableMaterial.PracticeHours 0}}
+                <div class="material-item">
+                    <div class="material-item__number">{{.FullCard.AvailableMaterial.PracticeHours}}</div>
+                    <div class="material-item__title">Часов<br />практики</div>
+                </div>
+                {{end}}
+
+                {{if ne .FullCard.AvailableMaterial.Weeks 0}}
+                <div class="material-item">
+                    <div class="material-item__number">{{.FullCard.AvailableMaterial.Weeks}}</div>
+                    <div class="material-item__title">Недель<br />онлайн-занятий</div>
+                </div>
+                {{end}}
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{{end}}
+{{end}}
+
+{{block "KnowledgeBlock" .}}
+{{if .FullCard.KnowledgeBlock.Knowledge}}
+<section class="knowledge">
+    <div class="container">
+        <h2>{{.FullCard.KnowledgeBlock.Header}}</h2>
+        <div class="knowledge-content">
+
+            {{range $index, $item := .FullCard.KnowledgeBlock.Knowledge}}
+            <div class="knowledge-item">
+                <span class="knowledge-item__title">
+                    <span>{{add $index 1}}</span>{{ $item.Head }}
+                </span>
+                <p>{{ $item.Body }}</p>
+            </div>
+            {{end}}
+
+        </div>
+    </div>
+</section>
+{{end}}
+
+{{end}}
+
+{{block "ForComfortBlock" .}}
+
+{{if .FullCard.ForComfortBlock.Instrument}}
+
+<section class="materials gray-bg">
+    <div class="container">
+        <div class="materials-content">
+            <span class="materials-content__title">{{.FullCard.ForComfortBlock.Head}}</span>
+            <div class="materials-content__body scroll">
+                <div class="material-items-scroll">
+
+                    {{range .FullCard.ForComfortBlock.Instrument}}
+                    <div class="material-item">
+                        <div class="material-item__icon">
+                            <img src="/images/399/{{.Icon}}" alt="">
+                        </div>
+                        <div class="material-item__title">{{.Text}}</div>
+                    </div>
+                    {{end}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{end}}
+
+{{end}}
+
+
+{{block "Faq" .}}
+{{if .FullCard.Faq}}
+<section class="question-section">
+
+    <div class="container">
+        <h2>Частые вопросы</h2>
+
+        <div class="question">
+            <ul class="accordion">
+                {{range .FullCard.Faq}}
+                <ul class="accordion">
+                    <li> <a href="#" class="opener"> {{.Question}} </a>
+                        <ul class="submenu">
+                            <li>
+                                {{.Answer}}
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+            </ul>
+            {{end}}
+        </div>
+    </div>
+
+</section>
+{{end}}
+{{end}}
+
+
+{{block "lessons" .}}
+
+<section class="programm-section">
+    <div class="container">
+        <h2>Программа курса</h2>
+
+        <div class="tabs-block">
+            <div class="tabs-scroll">
+                <ul class="tabs clearfix" data-tabgroup="first-tab-group">
+                    {{range $index, $lesson := .Lessons}}
+                    <li><a href="#tab{{$index}}" class="{{if eq $index 0}}active{{end}}">{{$index | add1}} урок</a></li>
+                    {{end}}
+                </ul>
+            </div>
+
+            <div id="first-tab-group" class="tabgroup">
+                {{range $index, $lesson := .Lessons}}
+                <div id="tab{{$index}}" class="tab-item {{if eq $index 0}}active{{end}}">
+                    <h3>Урок {{$index | add1}}</h3>
+
+                    <div class="programm-accordion">
+                        <ul class="accordion">
+                            {{if eq $lesson.Type "info"}}
+                            {{range $i, $info := $lesson.Info}}
+                            <li data-lesson="{{$index | add1}}" data-step="{{$i | add1}}">
+                                <span class="opener">
+                                    <span class="icon icon-programm-play"></span>
+                                    <span class="opener__name">Материал {{$index | add1}}-{{$i | add1}}</span>
+                                </span>
+                                <ul class="submenu">
+                                    <li>
+                                        {{if eq $info.Type "text"}}
+                                        <p class="p-text">{{$info.Data}}</p>
+                                        {{else if eq $info.Type "image"}}
+
+                                        <picture>
+                                            <source srcset="/images/399/{{$info.Data}}" media="(max-width: 399px)">
+                                            <source srcset="/images/599/{{$info.Data}}" media="(max-width: 599px)">
+                                            <source srcset="/images/992/{{$info.Data}}" media="(max-width: 992px)">
+                                            <source srcset="/images/1200/{{$info.Data}}" media="(max-width: 1200px)">
+                                            <source srcset="/images/1200/{{$info.Data}}" media="(min-width: 1201px)">
+                                            <img src="/images/1200/{{$info.Data}}" alt="" loading="lazy"
+                                                decoding="async">
+                                        </picture>
+
+                                        {{else if eq $info.Type "video"}}
+                                        <video controls width="70%" height="70%" class="video">
+                                            <source src="/getFileByPath?path={{$info.Data}}" type="video/mp4">
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                        {{else if eq $info.Type "attachment"}}
+                                        <a href="{{$info.Data}}" download>Скачать файл</a>
+                                        {{else}}
+                                        <p class="p-text">Неизвестный тип данных</p>
+                                        {{end}}
+                                    </li>
+                                </ul>
+                            </li>
+                            {{end}}
+
+                            {{else if eq $lesson.Type "test"}}
+                            {{ $test := index $.Tests $lesson.TestId }}
+                            <li data-lesson="{{$index | add1}}" data-step="1">
+                                <span class="opener">
+                                    <span class="icon icon-programm-voice"></span>
+                                    <span class="opener__name">Тест: {{ $test.Title }}</span>
+                                </span>
+                                <ul class="submenu">
+                                    {{range $qIndex, $question := $test.Questions}}
+                                    <li>
+                                        <p><strong>Вопрос {{$qIndex | add1}}:</strong> {{ $question.Info }}</p>
+
+                                        {{if eq $question.Type "input"}}
+                                        <textarea name="q{{$qIndex}}" class="textarea-input"
+                                            placeholder="Введите ваш ответ..."></textarea>
+
+                                        {{else if eq $question.Type "choice"}}
+                                        {{ $variantsCount := len $question.Answer }}
+                                        {{if eq $variantsCount 1}}
+                                        {{/* Один вариант — радио кнопка */}}
+                                        {{range $vIndex, $variant := $question.Variants}}
+                                        <label>
+                                            <input type="radio" name="q{{$qIndex}}"
+                                                value="{{ index $variant `text` | html }}">
+                                            {{ index $variant "text" }}
+                                        </label><br>
+                                        {{end}}
+                                        {{else}}
+                                        {{/* Несколько вариантов — чекбоксы */}}
+                                        {{range $vIndex, $variant := $question.Variants}}
+                                        <label>
+                                            <input type="checkbox" name="q{{$qIndex}}"
+                                                value="{{ index $variant `text` | html }}">
+                                            {{ index $variant "text" }}
+                                        </label><br>
+                                        {{end}}
+                                        {{end}}
+
+                                        {{else}}
+                                        <p>Неизвестный тип вопроса</p>
+                                        {{end}}
+                                    </li>
+                                    {{end}}
+
+                                    <button class="checkTest" data-test-id="{{ $lesson.TestId.Hex }}">Проверить
+                                        ответы</button>
+                                    <div class="test-summary"></div>
+                                </ul>
+                            </li>
+
+                            {{else}}
+                            <li>Неизвестный тип урока</li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</section>
+
+{{end}}
+
+
+
+
+
+{{block "content" .}}
+{{with .Courses}}
+{{block "HeaderCours" .}} {{end}}
+{{block "AvailableMaterial" .}} {{end}}
+{{block "KnowledgeBlock" .}} {{end}}
+{{block "ForComfortBlock" .}} {{end}}
+{{block "lessons" .}} {{end}}
+{{block "Faq" .}} {{end}}
+{{end}}
+{{end}}

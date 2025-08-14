@@ -1,0 +1,29 @@
+package main
+
+import (
+	"github.com/big-larry/suckhttp"
+	"github.com/okonma-violet/services/logs/logger"
+)
+
+func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
+	if req.GetMethod() == suckhttp.POST {
+		ok, err := s.updateFilePathById(l, req)
+		if !ok && err == nil {
+			response = suckhttp.NewResponse(400, "Bad Request")
+			return response, err
+		}
+		if err != nil {
+			response = suckhttp.NewResponse(500, "Internal Server Error")
+		} else {
+			response = suckhttp.NewResponse(200, "OK")
+		}
+	} else {
+		response = suckhttp.NewResponse(405, "Method Not Allowed")
+	}
+	return
+}
+
+func (s *service) Close(l logger.Logger) error {
+	s.session.Close()
+	return nil
+}

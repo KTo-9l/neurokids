@@ -1,0 +1,5 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName users_get_me
+
+ConnectionString  postgres://postgres:root@localhost:5432/authdb

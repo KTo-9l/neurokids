@@ -2,22 +2,24 @@ package main
 
 import (
 	"net"
+	"strconv"
 
-	"dikobra3/mongoApi"
-
-	"github.com/big-larry/mgo/bson"
 	"github.com/gobwas/ws"
 
 	"github.com/okonma-violet/services/logs/logger"
 )
 
 func (s *service) handleHttpToSocket(l logger.Logger, conn net.Conn) (err error) {
-	var uid bson.ObjectId
+	var uid int
 	u := ws.Upgrader{
 		OnHeader: func(key, value []byte) error {
 			l.Info(string(key), string(value))
 			if string(key) == "X-User-Id" {
-				uid = mongoApi.StringToObjectId(string(value))
+				uid, err = strconv.Atoi(string(value))
+				if err != nil {
+					l.Error("Parsing x-user-id", err)
+					return err
+				}
 			}
 			return nil
 		},
@@ -29,7 +31,7 @@ func (s *service) handleHttpToSocket(l logger.Logger, conn net.Conn) (err error)
 		return
 	}
 
-	l.Info("Upgraded for client", string(uid))
+	l.Info("Upgraded for client", strconv.Itoa(uid))
 
 	go addClient(l, conn, uid, s.pubs_getter)
 	return nil

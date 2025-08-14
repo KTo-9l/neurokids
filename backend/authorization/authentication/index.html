@@ -1,0 +1,8 @@
+{{template "layout.html" .}}{{define "title"}}Вход{{end}} {{define "content"}}
+<h1>Вход в систему/h1>
+<form method="post">
+	<div class="row"><label for="form_login" style="width:60px;display: inline-block;">Email:</label><input id="form_login" name="login" required /></div>
+	<div class="row"><label for="form_pass" style="width:60px;display: inline-block;">Пароль:</label><input id="form_pass" name="pass" type="password" required /></div>
+	<button type="submit" class="button">Войти</button>
+</form>
+{{end}}

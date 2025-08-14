@@ -1,0 +1,150 @@
+{{block "title" .}} Настройки {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css" />
+
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/common.css">
+<link rel="stylesheet" href="../static/css/icon.css">
+<link rel="stylesheet" href="../static/css/profile.css">
+{{end}}
+
+{{block "js" .}}
+<script src="../static/js/profile.js"></script>
+<script src="../static/js/mobile.js"></script>
+<script src="../static/js/password.js"></script>
+{{end}}
+
+{{block "setting" .}}
+
+<section class="section">
+
+    <div class="section__profile">
+        <div class="profile__side">
+            <ul class="profile-menu">
+                <li class="profile-menu__item profile-menu__item--active" data-target="main">
+                    <a href="#" class="text20Regular">Основная информация</a>
+                </li>
+                <li class="profile-menu__item" data-target="password">
+                    <a href="#" class="text20Regular">Изменить пароль</a>
+                </li>
+                <li class="profile-menu__item" data-target="dox">
+                    <a href="#" class="text20Regular">Сертификаты</a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="profile__content">
+
+            <!-- Основная информация -->
+            <div class="content-panel content-panel--active" data-panel="main">
+
+
+                <form class="profile-form" id="profile-form">
+                    <button class="back-button" type="button"> <span class="icon icon--left"></span> Назад</button>
+                    <!-- <div class="form-group">
+                        <label for="lastname">Фамилия</label>
+                        <input type="text" id="lastname" name="lastname" value="Башмачикн">
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="firstname">Имя</label>
+                        <input type="text" id="firstname" name="name" value="{{ .User.Name}}" required>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label for="patronymic">Отчество</label>
+                        <input type="text" id="patronymic" name="patronymic" value="Акакиевич">
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="email">Электронная почта</label>
+                        <input type="email" id="email" name="email" value="{{.User.Email}}" required>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" name="phone" value="+7 (999) 123-45-67">
+                    </div> -->
+
+                    <button type="submit" class="button button--small">Сохранить</button>
+                </form>
+                <div id="form-message" style="color: red; margin-top: 10px; display: none;"></div>
+            </div>
+
+            <!-- Изменение пароля -->
+            <div class="content-panel" data-panel="password">
+                <form class="profile-form" id="password-form">
+                    <button class="back-button" type="button"> <span class="icon icon--left"></span> Назад</button>
+                    <div class="form-group">
+                        <label for="current-password">Текущий пароль</label>
+                        <input type="password" id="current-password" name="old_password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-password">Новый пароль</label>
+                        <input type="password" id="new-password" name="new_password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Повторите новый пароль</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+
+                    
+
+                    <button type="submit" class="button button--small">Изменить пароль</button>
+                </form>
+                <div id="error-message" style="color: red; margin-top: 5px; display: none;"></div>
+            </div>
+            <div class="content-panel" data-panel="dox">
+                <div class="certificates ">
+                    <button class="back-button" type="button"> <span class="icon icon--left"></span> Назад</button>
+                    <div class="certificate-card">
+                        <div class="certificate-card__info">
+                            <div class="certificate-card__title">Курс: Развитие эмоционального интеллекта</div>
+                            <div class="certificate-card__date">Завершён: 14 июня 2025</div>
+                        </div>
+                        <div class="certificate-card__actions">
+                            <a href="certificate-emotion.pdf" target="_blank"
+                                class="button button--small">Посмотреть</a>
+                            <a href="certificate-emotion.pdf" download
+                                class="button button--small button--secondary">Скачать</a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-card__info">
+                            <div class="certificate-card__title">Курс: Логика и мышление</div>
+                            <div class="certificate-card__date">Завершён: 2 мая 2025</div>
+                        </div>
+                        <div class="certificate-card__actions">
+                            <a href="certificate-logic.pdf" target="_blank" class="button button--small">Посмотреть</a>
+                            <a href="certificate-logic.pdf" download
+                                class="button button--small button--secondary">Скачать</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+
+</section>
+
+{{end}}
+
+{{block "content" .}}
+
+{{block "setting" .}} {{end}}
+
+{{end}}

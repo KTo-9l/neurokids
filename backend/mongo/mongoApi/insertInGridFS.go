@@ -74,7 +74,6 @@ func InsertInGridFS(bucket *mgo.GridFS, file *os.File, path []string) (interface
 }
 
 func InsertInGridFSWithIdFromMultipart(bucket *mgo.GridFS, fileHeader *multipart.FileHeader, path []string, id interface{}) (interface{}, error) {
-	path = append(path, fileHeader.Filename)
 	gridFSFile, err := bucket.Create(fileHeader.Filename, path)
 	if err != nil {
 		log.Println("Error creating gfs file:", err)
@@ -106,7 +105,6 @@ func InsertInGridFSWithIdFromMultipart(bucket *mgo.GridFS, fileHeader *multipart
 }
 
 func InsertInGridFSFromMultipart(bucket *mgo.GridFS, fileHeader *multipart.FileHeader, path []string) (interface{}, error) {
-	path = append(path, fileHeader.Filename)
 	gridFSFile, err := bucket.Create(fileHeader.Filename, path)
 	if err != nil {
 		log.Println("Error creating gfs file:", err)

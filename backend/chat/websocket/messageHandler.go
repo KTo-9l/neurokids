@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/big-larry/mgo/bson"
 	"github.com/big-larry/suckhttp"
 	"github.com/gobwas/ws"
 	"github.com/okonma-violet/services/logs/logger"
@@ -14,8 +13,8 @@ import (
 
 type WsMessage struct {
 	Event string          `json:"event"`
-	From  bson.ObjectId   `json:"from"`
-	To    []bson.ObjectId `json:"to"`
+	From  int             `json:"from"`
+	To    []int           `json:"to"`
 	Data  json.RawMessage `json:"data"`
 }
 

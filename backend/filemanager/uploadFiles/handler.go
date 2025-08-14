@@ -1,6 +1,8 @@
 package main
 
 import (
+	"dikobra3/utils"
+
 	"github.com/big-larry/suckhttp"
 	"github.com/okonma-violet/services/logs/logger"
 )
@@ -17,8 +19,9 @@ func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *
 			return response, err
 		}
 
-		respBytes, err := structToBytes(l, respContent)
+		respBytes, err := utils.ObjectToBytes(respContent)
 		if err != nil {
+			l.Error("Object To Bytes", err)
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 		} else {
 			response = suckhttp.NewResponse(200, "OK").AddHeader("Content-Type", "application/json").SetBody(respBytes)

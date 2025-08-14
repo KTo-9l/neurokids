@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth_helpers"
 	"strconv"
 
 	"dikobra3/mongoApi"
@@ -11,6 +12,16 @@ import (
 )
 
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
+	perm, err := auth_helpers.GetPerms[auth_helpers.Perms](req)
+	if err != nil {
+		response = suckhttp.NewResponse(403, "forbidden")
+		return
+	}
+	if p, ok := perm.Perms[0]; !ok || p&auth_helpers.AllPerms == 0 {
+		response = suckhttp.NewResponse(403, "forbidden")
+		return
+	}
+
 	if req.GetMethod() == suckhttp.GET {
 		chatId := req.Uri.Query().Get("chatId")
 		if chatId == "" || !mongoApi.IsObjectId(chatId) {

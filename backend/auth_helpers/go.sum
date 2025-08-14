@@ -1,0 +1,6 @@
+github.com/big-larry/suckhttp v0.0.0-20250813123807-92fba52c65cb h1:csfOkDeXiB15fsTlnvDhKqGR+Q1NqlkzomPb5Na6ayA=
+github.com/big-larry/suckhttp v0.0.0-20250813123807-92fba52c65cb/go.mod h1:P7WnDlYvo6PNf4bARgHBSrPnN0lwramxaY2x6UZ0CGc=
+github.com/big-larry/suckutils v0.0.0-20250417113432-6848d65371cb h1:LhhyNjBPPBddKKisD1hYEJkcLqwwq5LeSwckxt+zftU=
+github.com/big-larry/suckutils v0.0.0-20250417113432-6848d65371cb/go.mod h1:6yg3GVTrL634nW45SkZuchulqFvpMq8g+B0dhGv82v0=
+github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
+github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=

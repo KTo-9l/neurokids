@@ -1,0 +1,7 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+ServiceName authentication_web
+
+ConnectionString  postgres://postgres:root@localhost:5432/authdb
+HtmlIndexTemplate    ./index.html
+LayoutTemplate  ./../../../static/html/layout.html
+

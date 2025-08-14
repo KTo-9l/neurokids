@@ -1,0 +1,236 @@
+.icon {
+    width: 48px;
+    height: 48px;
+    mask-image: var(--icon);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: black;
+    mask-size: contain;
+    cursor: pointer;
+}
+
+.icon--20px{
+    width: 20px;
+    height: 20px;
+}
+
+.green {
+    background-color: #8bac7d;
+}
+
+.grey{
+  background-color: grey;
+}
+.white{
+  background-color: white;
+}
+
+.icon--left {
+    --icon: url('../svg/left.svg');
+}
+
+.icon--right {
+    --icon: url('../svg/right.svg');
+}
+
+.icon--up {
+    --icon: url('../svg/up.svg');
+}
+
+.icon--down{
+    --icon: url('../svg/down.svg');
+}
+
+.icon--play{
+    --icon: url('../svg/play-icon.svg');
+}
+
+.icon--messages {
+  --icon: url('../svg/message-icon.svg');
+}
+
+.icon--material-icon-document {
+  --icon: url('../svg/material-icon-document.svg');
+}
+
+.icon--material-icon-work {
+  --icon: url('../svg/material-icon-work.svg');
+}
+
+.icon--material-icon-video {
+  --icon: url('../svg/material-icon-video.svg');
+}
+
+.icon-programm-play {
+  --icon: url('../svg/programm-play.svg');
+}
+
+.icon-play-icon {
+  --icon: url('../svg/play-icon.svg');
+}
+
+.icon-programm-voice {
+  --icon: url('../svg/programm-voice.svg');
+}
+
+.icon-programm-document2 {
+  --icon: url('../svg/programm-document2.svg');
+}
+
+.icon-programm-star {
+  --icon: url('../svg/programm-star.svg');
+}
+
+.icon-bookmark-icon {
+  --icon: url('../svg/bookmark-icon.svg');
+}
+
+.icon-clip {
+  --icon: url('../svg/clip.svg');
+}
+
+.icon-add-user {
+  --icon: url('../svg/add-user.svg');
+  /* */
+}
+
+.icon-search {
+  --icon: url('../svg/search.svg');
+  /* */
+}
+
+.icon-dots {
+  --icon: url('../svg/dots.svg');
+  /* */
+}
+
+.icon-close {
+  --icon: url('../svg/close.svg');
+  /* */
+}
+
+.icon-login {
+  --icon: url('../svg/login.svg');
+  /* */
+}
+
+.icon-folder {
+  --icon: url('../svg/folder.svg');
+  /* */
+}
+
+.icon-volume-off {
+  --icon: url('../svg/volume-mute-solid.svg');
+}
+
+.icon-delete-icon {
+  --icon: url('../svg/delete-icon.svg');
+  /* */
+}
+
+.icon-file {
+  --icon: url('../svg/file.svg');
+  /* */
+}
+
+.icon-image-icon {
+  --icon: url('../svg/image-icon.svg');
+  /* */
+}
+
+.icon-camera {
+  --icon: url('../svg/camera.svg');
+  /* */
+}
+
+.icon-plus-white {
+  --icon: url('../svg/plus-white.svg');
+  background-color: white;
+}
+
+
+@media (max-width: 768px) {
+    .icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+
+.icon--messages {
+  --icon: url('../svg/message-icon.svg');
+}
+
+.icon-clip {
+  --icon: url('../svg/clip.svg');
+}
+
+.icon-add-user {
+  --icon: url('../svg/add-user.svg');
+  /* */
+}
+
+.icon-search {
+  --icon: url('../svg/search.svg');
+  /* */
+}
+
+.icon-dots {
+  --icon: url('../svg/dots.svg');
+  /* */
+}
+
+.icon-close {
+  --icon: url('../svg/close.svg');
+  /* */
+}
+
+.icon-login {
+  --icon: url('../svg/login.svg');
+  /* */
+}
+
+.icon-folder {
+  --icon: url('../svg/folder.svg');
+  /* */
+}
+
+.icon-volume-off {
+  --icon: url('../svg/volume-mute-solid.svg');
+}
+
+.icon-delete-icon {
+  --icon: url('../svg/delete-icon.svg');
+  /* */
+}
+
+.icon-file {
+  --icon: url('../svg/file.svg');
+  /* */
+}
+
+.icon-image-icon {
+  --icon: url('../svg/image-icon.svg');
+  /* */
+}
+
+.icon-camera {
+  --icon: url('../svg/camera.svg');
+  /* */
+}
+
+.icon-plus-white {
+  --icon: url('../svg/plus-white.svg');
+}
+
+.icon-back-arrow{
+  --icon: url('../svg/back-arrow.svg');
+}
+
+.icon-pp-plane{
+  --icon: url('../svg/pp-plane.svg');
+}
+
+.icon-rr-check{
+  --icon: url('../svg/rr-check.svg');
+}

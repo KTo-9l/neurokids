@@ -1,0 +1,5 @@
+ConfiguratorAddr tcp:127.0.0.1:8099
+
+ServiceName filesharing_upsert_file_by_path
+
+ConnectionString mongodb://localhost:27017

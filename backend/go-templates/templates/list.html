@@ -1,0 +1,113 @@
+{{define "title"}}Список курсов{{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/list.css" rel="stylesheet" type="text/css">
+<link href="../static/css/common.css" rel="stylesheet" type="text/css">
+<link href="../static/css/main.css" rel="stylesheet" type="text/css">
+<link href="../static/css/icon.css" rel="stylesheet" type="text/css">
+{{end}}
+
+{{define "course"}}
+<div class="list-item">
+  <a href="cours?id={{.Id.Hex}}">
+    <div class="list-item__image">
+      <div class="list-item__image-info">
+        {{if and .ShortCard.Time .ShortCard.Type}}
+        <div class="list-item__image-left">
+          <span>{{.ShortCard.Time}}</span>
+          <span>{{.ShortCard.Type}}</span>
+        </div>
+        {{end}}
+        {{if .ShortCard.City}}
+        <div class="list-item__image-right"><span>{{.ShortCard.City}}</span></div>
+        {{end}}
+      </div>
+      <picture>
+        <source srcset="/images/399/{{.ShortCard.Cover}}" media="(max-width: 399px)">
+        <source srcset="/images/599/{{.ShortCard.Cover}}" media="(max-width: 599px)">
+        <source srcset="/images/992/{{.ShortCard.Cover}}" media="(max-width: 992px)">
+        <source srcset="/images/1200/{{.ShortCard.Cover}}" media="(max-width: 1200px)">
+        <source srcset="/images/1200/{{.ShortCard.Cover}}" media="(min-width: 1201px)">
+        <img src="/images/1200/{{.ShortCard.Cover}}" alt="" loading="lazy" decoding="async">
+      </picture>
+
+
+    </div>
+
+    <div class="list-item__content">
+      <div class="list-item__head">
+        <div class="list-item__author">{{.Author}}</div>
+      </div>
+      <div class="list-item__title">{{.Title}}</div>
+      <p>{{.ShortCard.Description}}</p>
+      <div class="list-item__bottom">
+        <a href="cours?id={{.Id.Hex}}" class="btn btn-green-light">Подробнее</a>
+      </div>
+    </div>
+  </a>
+</div>
+{{end}}
+
+{{block "content" .}}
+<section class="list-section section-top">
+  <div class="container section-cr">
+    <h2>Курсы</h2>
+
+    <!-- ВКЛАДКИ -->
+    <div class="tabs-block">
+      <div class="tabs-filter">
+        <div class="tabs-scroll">
+          <ul class="tabs clearfix" data-tabgroup="course-tab-group">
+            <li><a href="#tab-all" class="active">Все</a></li>
+            <li><a href="#tab-started">Начатое</a></li>
+            <li><a href="#tab-completed">Завершенные</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="course-tab-group" class="tabgroup">
+        <!-- Все -->
+        <div id="tab-all" class="tab-item" style="">
+          <div class="list-content">
+            {{range .Courses}}
+            {{if and .Shown (not .Deleted)}}
+            {{template "course" .}}
+            {{end}}
+            {{end}}
+          </div>
+        </div>
+
+        <!-- Начатое -->
+        <div id="tab-started" class="tab-item" style="display: none;">
+          <div class="list-content">
+            {{range .Courses}}
+            {{if and .Shown (not .Deleted) .Started (not .Completed)}}
+            {{template "course" .}}
+            {{end}}
+            {{end}}
+          </div>
+        </div>
+
+        <!-- Завершенные -->
+        <div id="tab-completed" class="tab-item" style="display: none;">
+          <div class="list-content">
+            {{range .Courses}}
+            {{if and .Shown (not .Deleted) .Completed}}
+            {{template "course" .}}
+            {{end}}
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{end}}
+
+{{block "js" .}}
+
+<script src="../static/js/list.js"> </script>
+<script src="../static/js/header-mes.js"> </script>
+<script src="../static/js/mobile.js"></script>
+{{end}}

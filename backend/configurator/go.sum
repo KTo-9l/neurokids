@@ -1,4 +1,12 @@
+github.com/big-larry/suckutils v0.0.0-20250812153223-6165c58dc43b h1:ZeFjm4kAYHYpCD9/2B8ls+Hu3YJQWxZ4F3rzW7W1/aA=
+github.com/big-larry/suckutils v0.0.0-20250812153223-6165c58dc43b/go.mod h1:5fawDMczz2lczw98vd8pRkZcGsllJnpJJh9l+f9Ohd8=
 github.com/mailru/easygo v0.0.0-20190618140210-3c14a0dc985f h1:4+gHs0jJFJ06bfN8PshnM6cHcxGjRUVRLo5jndDiKRQ=
 github.com/mailru/easygo v0.0.0-20190618140210-3c14a0dc985f/go.mod h1:tHCZHV8b2A90ObojrEAzY0Lb03gxUxjDHr5IJyAh4ew=
-golang.org/x/sys v0.30.0 h1:QjkSwP/36a20jFYWkSue1YwXzLmsV5Gfq7Eiy72C1uc=
-golang.org/x/sys v0.30.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+github.com/okonma-violet/confdecoder v0.0.0-20230926094403-7e3eab7eff29 h1:B4tx67hvbtrTyYpbbR9lsuA5ZJutftoL/1IezRXldJo=
+github.com/okonma-violet/confdecoder v0.0.0-20230926094403-7e3eab7eff29/go.mod h1:ww/+SFov4W8uAfhPC5Rm37HKLQCROEaYi95Ikfh/Tkg=
+github.com/okonma-violet/dynamicworkerspool v0.0.0-20240317115954-810a6361f715 h1:vxsat2Y8CWtsaDF4D43qJp9K2K/8bPTDfWpIT09/sWc=
+github.com/okonma-violet/dynamicworkerspool v0.0.0-20240317115954-810a6361f715/go.mod h1:H6sSJItqki5t+8hoCdZepIW4jLEnPCSN6rY/U85Zay4=
+github.com/okonma-violet/services v0.0.0-20250813192144-102025c29014 h1:zvaI4tTPN3nMUD/zV2aCI/WFoKmBS/2HjxcsVGlNisc=
+github.com/okonma-violet/services v0.0.0-20250813192144-102025c29014/go.mod h1:G40Alz1FX5WBhYxQDqQaLAXdBxdhs9Fp/wChYLX36FM=
+golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
+golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=

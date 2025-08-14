@@ -12,6 +12,11 @@ type Course struct {
 type Lesson struct {
 	CourseId bson.ObjectId `bson:"courseId"         json:"courseId"`
 	Type     string        `bson:"type"             json:"type"`
-	Info     interface{}   `bson:"info,omitempty"   json:"info,omitempty"`
-	TestId   interface{}   `bson:"testId,omitempty" json:"testId,omitempty"`
+	Info     []Info        `bson:"info,omitempty"   json:"info,omitempty"`
+	TestId   bson.ObjectId `bson:"testId,omitempty" json:"testId,omitempty"`
+}
+
+type Info struct {
+	Type string `bson:"type" json:"type"`
+	Data string `bson:"data" json:"data"`
 }

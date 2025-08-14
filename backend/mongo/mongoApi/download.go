@@ -17,5 +17,26 @@ func GetFileById(bucket *mgo.GridFS, idString string) (gfsFile *mgo.GridFile, er
 		return nil, err
 	}
 
-	return gfsFile, nil
+	return gfsFile, err
+}
+
+func GetFileByPath(bucket *mgo.GridFS, path []string) (gfsFile *mgo.GridFile, err error) {
+	gfsFile, err = bucket.OpenPath(path)
+
+	if err != nil && err != mgo.ErrNotFound {
+		return nil, err
+	}
+
+	return gfsFile, err
+}
+
+func ListFfilesForPath(bucket *mgo.GridFS, path []string) (gfsFiles []GridFSFile, err error) {
+	// query := bucket.Files.Find(bson.M{"path": bson.M{"$all": path}})
+	query := bucket.Files.Find(bson.M{"path": path[0]})
+	err = query.All(&gfsFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	return gfsFiles, nil
 }

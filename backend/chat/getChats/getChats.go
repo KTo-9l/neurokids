@@ -7,9 +7,9 @@ import (
 	"github.com/okonma-violet/services/logs/logger"
 )
 
-func (s *service) getChats(l logger.Logger, uid string) (chats []models.Chat, err error) {
+func (s *service) getChats(l logger.Logger, uid int) (chats []models.Chat, err error) {
 	selector := make(map[string]interface{})
-	selector["members"] = mongoApi.StringToObjectId(uid)
+	selector["members"] = uid
 
 	chats, err = mongoApi.ListTypifiedCollectionWithSelector[models.Chat](s.collection, selector)
 	if err != nil {

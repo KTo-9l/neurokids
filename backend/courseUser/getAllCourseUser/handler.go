@@ -1,17 +1,29 @@
 package main
 
 import (
-	"dikobra3/mongoApi"
+	"auth_helpers"
 	"dikobra3/utils"
+	"strconv"
 
 	"github.com/big-larry/suckhttp"
 	"github.com/okonma-violet/services/logs/logger"
 )
 
 func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
+	perm, err := auth_helpers.GetPerms[auth_helpers.Perms](req)
+	if err != nil {
+		response = suckhttp.NewResponse(403, "forbidden")
+		return
+	}
+	if p, ok := perm.Perms[0]; !ok || p&auth_helpers.AllPerms == 0 {
+		response = suckhttp.NewResponse(403, "forbidden")
+		return
+	}
+
 	if req.GetMethod() == suckhttp.GET {
-		uid := req.GetHeader("x-user-id")
-		if uid == "" || !mongoApi.IsObjectId(uid) {
+		uidStr := req.GetHeader("x-user-id")
+		var uid int
+		if uid, err = strconv.Atoi(uidStr); err != nil {
 			response = suckhttp.NewResponse(401, "Unauthorized")
 			return
 		}

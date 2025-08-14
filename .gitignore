@@ -1,3 +1,6 @@
 backend/db/*
 !backend/db/readme
 backend/mongo/testApi
+
+static/images/*
+.vscode

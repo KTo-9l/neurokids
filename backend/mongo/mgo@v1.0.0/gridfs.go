@@ -268,6 +268,18 @@ func (gfs *GridFS) Open(name string) (file *GridFile, err error) {
 	return
 }
 
+func (gfs *GridFS) OpenPath(path []string) (file *GridFile, err error) {
+	var doc gfsFile
+	err = gfs.Files.Find(bson.M{"path": bson.M{"$eq": path}}).Sort("-uploadDate").One(&doc)
+	if err != nil {
+		return
+	}
+	file = gfs.newFile()
+	file.mode = gfsReading
+	file.doc = doc
+	return
+}
+
 // OpenNext opens the next file from iter for reading, sets *file to it,
 // and returns true on the success case. If no more documents are available
 // on iter or an error occurred, *file is set to nil and the result is false.
@@ -346,6 +358,21 @@ type gfsDocId struct {
 // Remove deletes all files with the provided name from the GridFS.
 func (gfs *GridFS) Remove(name string) (err error) {
 	iter := gfs.Files.Find(bson.M{"filename": name}).Select(bson.M{"_id": 1}).Iter()
+	var doc gfsDocId
+	for iter.Next(&doc) {
+		if e := gfs.RemoveId(doc.Id); e != nil {
+			err = e
+		}
+	}
+	if err == nil {
+		err = iter.Close()
+	}
+	return err
+}
+
+// RemovePath deletes all files with the provided path from the GridFS.
+func (gfs *GridFS) RemovePath(path []string) (err error) {
+	iter := gfs.Files.Find(bson.M{"path": bson.M{"$eq": path}}).Select(bson.M{"_id": 1}).Iter()
 	var doc gfsDocId
 	for iter.Next(&doc) {
 		if e := gfs.RemoveId(doc.Id); e != nil {

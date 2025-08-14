@@ -29,6 +29,8 @@ func (s *service) updateTestUser(l logger.Logger, reqBytes []byte) (testUser mod
 		},
 	}
 
+	l.Debug("Id", mongoApi.ObjectIdToString(testUser.Id))
+
 	err = mongoApi.UpdateById(s.collection, testUser.Id, toUpdate)
 	if err != nil {
 		l.Error("coll.Update", err)

@@ -33,18 +33,21 @@ func (s *service) uploadFiles(l logger.Logger, rbody *suckhttp.Request) (filesId
 
 	var resp []struct {
 		Filename string      `json:"filename"`
+		Path     []string    `json:"path"`
 		Id       interface{} `json:"id"`
 	}
 	for _, fileHeader := range files {
-		id, err := mongoApi.InsertInGridFSFromMultipart(s.bucket, fileHeader, path)
+		resultPath := append(path, fileHeader.Filename)
+		id, err := mongoApi.InsertInGridFSFromMultipart(s.bucket, fileHeader, resultPath)
 		if err != nil {
 			l.Error("UploadFile", err)
 			return nil, err
 		}
 		resp = append(resp, struct {
-			Filename string      "json:\"filename\""
-			Id       interface{} "json:\"id\""
-		}{Filename: fileHeader.Filename, Id: id})
+			Filename string      `json:"filename"`
+			Path     []string    `json:"path"`
+			Id       interface{} `json:"id"`
+		}{Filename: fileHeader.Filename, Path: resultPath, Id: id})
 	}
 	return resp, nil
 }

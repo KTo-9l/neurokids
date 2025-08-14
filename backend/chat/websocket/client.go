@@ -8,7 +8,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/big-larry/mgo/bson"
 	"github.com/gobwas/ws"
 	"github.com/okonma-violet/services/logs/logger"
 	"github.com/okonma-violet/services/universalservice_nonepoll"
@@ -16,19 +15,19 @@ import (
 
 type Hub struct {
 	mu      sync.Mutex
-	clients map[bson.ObjectId][]*Client
+	clients map[int][]*Client
 }
 
 type Client struct {
 	conn   net.Conn
 	ctx    context.Context
 	cancel context.CancelFunc
-	id     bson.ObjectId
+	id     int
 }
 
 var hub *Hub
 
-func addClient(l logger.Logger, conn net.Conn, id bson.ObjectId, pubs universalservice_nonepoll.Publishers_getter) {
+func addClient(l logger.Logger, conn net.Conn, id int, pubs universalservice_nonepoll.Publishers_getter) {
 	ctx, cancel := context.WithCancel(context.Background())
 	client := &Client{
 		conn:   conn,

@@ -1,0 +1,90 @@
+{{define "title"}} Обучение {{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css" />
+
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/contact.css">
+<link rel="stylesheet" href="../static/css/icon.css">
+{{end}}
+
+{{block "js" .}}
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.7/dist/inputmask.min.js"></script>
+<script src="../static/js/modal.lern.dg.js"></script>
+{{end}}
+
+
+
+{{block "learn" .}}
+
+<section id="learn" class="section">
+  <h2 class="text55 text--center"> <b> Обучение </b></h2>
+  <div class="section__inner-row">
+
+    <div class="section__text">
+      <div class="text20Regular"> При покупке дидактического набора Neurokids организация получает
+        неограниченный доступ к базе знаний. Онлайн курсы, повышение квалификации для специалистов,
+        разборы случаев и нетворкинг – все это входит в годовую подписку.
+      </div>
+
+      <button class="button button--small openModal">
+        <span class="button__text">Узнать подробнее</span>
+      </button>
+    </div>
+    <div class="section__gallery">
+      <div class="icon icon--left green"></div>
+      <div class="gallery__images">
+        
+        <img src="../static/picture/i.jpg" class="gallery__img active">
+        <img src="../static/picture/learn.jpg" class="gallery__img">
+
+      </div>
+      <div class="icon icon--right green"> </div>
+    </div>
+  </div>
+
+</section>
+{{end}}
+
+{{block "dialog" .}}
+
+<dialog id="myModal" class="modal modal-consult">
+  <div class="modal__content">
+      <button class="modal__close" aria-label="Закрыть">&times;</button>
+      <h2 class="text30 text--center">ПОЛУЧИТЬ КОНСТУЛЬТАЦИЮ СПЕЦИАЛИСТА</h2>
+      <p class="text17">Заполните форму ниже и мы свяжемя с Вами в ближайшее время</p>
+      <form method="dialog" class="modal-consult__form">
+          <input id="name-modal" type="text" placeholder="Ваше имя" class="input input--dialog">
+          <input id="phone-modal" type="tel" placeholder="+7 (___)___--" class="input phone-input input--dialog">
+          <input id="email-modal" type="text" placeholder="e-mail" class="input input--dialog">
+          <input id="com" type="text" placeholder="Комментарий" class="input input--dialog">
+          <button class="button button--small">
+              <span class="button__text">ОТПРАВИТЬ</span>
+          </button>
+      </form>
+  </div>
+
+</dialog>
+
+
+<dialog id="loginModal" class="modal login-modal">
+    <div class="modal__content">
+        <button class="modal__close" aria-label="Закрыть">&times;</button>
+
+        <h2 class="text30 text--center">Вход</h2>
+        <form class="login-form">
+            <input type="text" placeholder="Логин" name="login" class="input input--login">
+            <input type="password" placeholder="Пароль" name="pass" class="input input--login">
+            <div class="login-error" style="color: red; margin-top: 10px; display: none;"></div>
+            <button class="button button--small" type="submit"> <span class="button__text">ВОЙТИ</span></button>
+        </form>
+    </div>
+</dialog>
+
+{{end}}
+
+{{block "content" .}}
+{{block "learn" .}} {{end}}
+{{block "dialog" .}} {{end}}
+{{end}}

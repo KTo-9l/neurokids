@@ -4,7 +4,7 @@ import "github.com/big-larry/mgo/bson"
 
 type TestUser struct {
 	Id       bson.ObjectId `bson:"_id"      json:"id,omitempty"`
-	UserId   bson.ObjectId `bson:"userId"   json:"userId"`
+	UserId   int           `bson:"userId"   json:"userId"`
 	TestId   bson.ObjectId `bson:"testId"   json:"testId"`
 	Progress Progress      `bson:"progress" json:"progress"`
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"dikobra3/utils"
+
 	"github.com/big-larry/suckhttp"
 	"github.com/okonma-violet/services/logs/logger"
 )
@@ -10,8 +12,9 @@ func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *
 		if files, err := s.getAllFiles(l); err != nil {
 			response = suckhttp.NewResponse(500, "Internal Server Error")
 		} else {
-			body, err := structToBytes(l, files)
+			body, err := utils.ObjectToBytes(files)
 			if err != nil {
+				l.Error("Object To Bytes", err)
 				response = suckhttp.NewResponse(500, "Internal Server Error")
 				return response, err
 			}

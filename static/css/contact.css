@@ -1,0 +1,51 @@
+
+
+
+
+.section--row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: calc(100vh - var(--header-height) - var(--footer-height) - clamp(20px, 10%, 60px) - clamp(20px, 10%, 60px));
+
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /* контент сверху вниз */
+}
+
+main {
+    flex: 1;
+    /* занимает всё доступное пространство между header и footer */
+}
+
+html,
+body {
+    height: 100%;
+    /* растягиваем html и body на всю высоту окна */
+    margin: 0;
+}
+
+@media (max-width: 1220px) {
+    .section--row {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    html,
+    body {
+        height: unset;
+    }
+
+}
+
+@media (max-width: 1500px) {
+
+    html,
+    body {
+        height: unset;
+    }
+    
+}

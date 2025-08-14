@@ -1,0 +1,146 @@
+{{block "title" .}} Диагностика{{end}}
+
+{{block "styles" .}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css" />
+
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/common.css">
+<link rel="stylesheet" href="../static/css/icon.css">
+<link rel="stylesheet" href="../static/css/diagnostics.css">
+{{end}}
+
+{{block "js" .}}
+<script src="../static/js/diagnostic.js"></script>
+<script src="../static/js/mobile.js"></script>
+{{end}}
+
+{{block "diagmostic" .}} 
+<section class="section">
+
+        <div class="diagnostics__header">
+            <div class="search-box">
+                <h2>Дети</h2>
+                <div class="search-input">
+                    <span class="icon icon-search"></span>
+                    <input type="text" placeholder="Поиск">
+                    <span class="icon icon-close"></span>
+                </div>
+            </div>
+
+            <a href="diagnostic_create.html" class="button button--small"> Добавить нового ребенка </a>
+        </div>
+        <div class="diagnostics__box">
+
+            <a href="diagnostic_children_select.html" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Акакий</span>
+                    <span id="fatherland">Акакиевич</span>
+                    <span id="second-name">Башмачикн</span>
+                </span>
+                <span>0 проб</span>
+                <span>Ворует шинель</span>
+                <span> Самый Кртуой Психолог </span>
+                <span>Возраст: 183г (xx.xx.1842)</span>
+                <span>регистрация: 23.07.2025</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Вера</span>
+                    <span id="fatherland">Сергеевна</span>
+                    <span id="second-name">Светлова</span>
+                </span>
+                <span>1 проба</span>
+                <span>Рисует котов</span>
+                <span></span>
+                <span>Возраст: 12 лет</span>
+                <span>регистрация: 01.01.2024</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Борис</span>
+                    <span id="fatherland">Николаевич</span>
+                    <span id="second-name">Жук</span>
+                </span>
+                <span>2 пробы</span>
+                <span>Прячет дневник</span>
+                <span></span>
+                <span>Возраст: 10 лет</span>
+                <span>регистрация: 12.03.2024</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Алина</span>
+                    <span id="fatherland">Петровна</span>
+                    <span id="second-name">Лось</span>
+                </span>
+                <span>0 проб</span>
+                <span>Поёт песни</span>
+                <span></span>
+                <span>Возраст: 8 лет</span>
+                <span>регистрация: 05.05.2025</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Григорий</span>
+                    <span id="fatherland">Павлович</span>
+                    <span id="second-name">Сыч</span>
+                </span>
+                <span>1 проба</span>
+                <span>Читает Лермонтова</span>
+                <span></span>
+                <span>Возраст: 14 лет</span>
+                <span>регистрация: 17.09.2023</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Дарья</span>
+                    <span id="fatherland">Алексеевна</span>
+                    <span id="second-name">Бурундукова</span>
+                </span>
+                <span>3 пробы</span>
+                <span>Собирает наклейки</span>
+                <span></span>
+                <span>Возраст: 11 лет</span>
+                <span>регистрация: 20.04.2024</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Егор</span>
+                    <span id="fatherland">Константинович</span>
+                    <span id="second-name">Рысь</span>
+                </span>
+                <span>0 проб</span>
+                <span>Играет в шахматы</span>
+                <span></span>
+                <span>Возраст: 9 лет</span>
+                <span>регистрация: 02.06.2025</span>
+            </a>
+
+            <a href="#" class="diagnostics__children">
+                <span class="text20Medium">
+                    <span id="name">Жанна</span>
+                    <span id="fatherland">Тимофеевна</span>
+                    <span id="second-name">Крот</span>
+                </span>
+                <span>2 пробы</span>
+                <span>Рисует на стенах</span>
+                <span> Самый Кртуой Психолог </span>
+                <span>Возраст: 13 лет</span>
+                <span>регистрация: 11.11.2022</span>
+            </a>
+
+        </div>
+
+    </section>
+{{end}}
+
+{{block "content" .}}
+{{block "diagmostic" .}} {{end}}
+{{end}}
