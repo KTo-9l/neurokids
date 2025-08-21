@@ -7,10 +7,14 @@ import (
 )
 
 type config struct {
+	CachedImagePath string
+	LimitSize       int
 }
 
 type service struct {
-	pubs_getter universalservice_nonepoll.Publishers_getter
+	pubs_getter     universalservice_nonepoll.Publishers_getter
+	cachedImagePath string
+	limitSize       int
 }
 
 const (
@@ -21,7 +25,9 @@ func (c *config) InitFlags() {}
 
 func (c *config) PrepareHandling(ctx context.Context, pubs_getter universalservice_nonepoll.Publishers_getter) (universalservice_nonepoll.BaseHandleFunc, universalservice_nonepoll.Closer, error) {
 	s := &service{
-		pubs_getter: pubs_getter,
+		pubs_getter:     pubs_getter,
+		cachedImagePath: c.CachedImagePath,
+		limitSize:       c.LimitSize,
 	}
 
 	return universalservice_nonepoll.CreateHTTPHandleFunc(s), s, nil

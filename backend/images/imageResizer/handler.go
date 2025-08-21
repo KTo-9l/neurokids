@@ -16,6 +16,14 @@ func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *
 			return response, err
 		}
 		response = suckhttp.NewResponse(200, "Ok").SetBody(imgBytes)
+	} else if req.GetMethod() == suckhttp.PUT {
+		err = s.updateImage(l, req)
+		if err != nil {
+			l.Error("Update image error", err)
+			response = suckhttp.NewResponse(500, "Internal Server Error")
+			return response, err
+		}
+		response = suckhttp.NewResponse(200, "Ok")
 	} else {
 		response = suckhttp.NewResponse(405, "Method Now Allowed")
 	}

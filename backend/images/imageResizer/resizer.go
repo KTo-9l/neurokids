@@ -45,20 +45,21 @@ func (s *service) getOriginalImage(l logger.Logger, path string) (imageBytes []b
 	return resp.GetBody(), nil
 }
 
-func (s *service) getResizedImage(l logger.Logger, req *suckhttp.Request) (imgBytes []byte, err error) {
+func (s *service) getResizedImage(l logger.Logger, req *suckhttp.Request) (imageBytes []byte, err error) {
 	pathFragments := strings.Split(req.Uri.Path[1:], "/")
 	reqWidth, err := strconv.Atoi(pathFragments[1])
 	if err != nil {
 		l.Error("Parsing width (string) to (int)", err)
 		return nil, err
 	}
+	if reqWidth > int(s.limitSize) {
+		reqWidth = int(s.limitSize)
+	}
 
 	imagePath := strings.Join(pathFragments[2:len(pathFragments)-1], "/")
-	l.Debug("ImagePath ==============", fmt.Sprint(imagePath))
 
 	imageName := pathFragments[len(pathFragments)-1]
 	originalImagePath := fmt.Sprintf("/%s/%s", imagePath, imageName)
-	l.Debug("OriginalImagePath", originalImagePath)
 
 	originalImageBytes, err := s.getOriginalImage(l, originalImagePath)
 	if err != nil {
@@ -66,16 +67,68 @@ func (s *service) getResizedImage(l logger.Logger, req *suckhttp.Request) (imgBy
 		return nil, err
 	}
 
+	imageBytes, sourceWidth, err := s.resizeImage(l, originalImageBytes, reqWidth)
+	err = s.saveImageInCache(l, imagePath, imageName, reqWidth, sourceWidth, imageBytes)
+
+	return
+}
+
+func (s *service) updateImage(l logger.Logger, req *suckhttp.Request) (err error) {
+	pathFragments := strings.Split(req.Uri.Path[1:], "/")
+	imagePath := strings.Join(pathFragments[1:len(pathFragments)-1], "/")
+	imageName := pathFragments[len(pathFragments)-1]
+
+	originalImagePath := fmt.Sprintf("/%s/%s", imagePath, imageName)
+	originalImageBytes, err := s.getOriginalImage(l, originalImagePath)
+	if err != nil {
+		l.Error("Error get original image", err)
+		return err
+	}
+
+	dirEntries, err := os.ReadDir(s.cachedImagePath)
+	for _, dir := range dirEntries {
+		if !dir.IsDir() {
+			continue
+		}
+
+		replacingImageDir := fmt.Sprintf("%s%s/%s", s.cachedImagePath, dir.Name(), strings.Join(pathFragments[1:], "/"))
+
+		_, err = os.Open(replacingImageDir)
+		if err != nil {
+			l.Error("Opening file", err)
+			continue
+		}
+
+		reqWidth, err := strconv.Atoi(dir.Name())
+		if err != nil {
+			continue
+		}
+
+		newImageBytes, sourceWidth, err := s.resizeImage(l, originalImageBytes, reqWidth)
+		if err != nil {
+			l.Error("Resize Image error", err)
+			return err
+		}
+		err = s.saveImageInCache(l, imagePath, imageName, reqWidth, sourceWidth, newImageBytes)
+		if err != nil {
+			l.Error("Saving image in cache", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *service) resizeImage(l logger.Logger, originalImageBytes []byte, reqWidth int) (imgBytes []byte, sourceWidth int, err error) {
 	originalImageReader := bytes.NewReader(originalImageBytes)
 
 	img, format, err := image.Decode(originalImageReader)
 	if err != nil {
 		l.Debug("Format", format)
 		l.Error("Decoding image", err)
-		return nil, err
+		return nil, -1, err
 	}
 
-	// sourceWidth := img.Bounds().Dx()
+	sourceWidth = img.Bounds().Dx()
 	img = resize.Resize(uint(reqWidth), 0, img, resize.Lanczos3)
 
 	buf := new(bytes.Buffer)
@@ -87,98 +140,34 @@ func (s *service) getResizedImage(l logger.Logger, req *suckhttp.Request) (imgBy
 	default:
 		err = errors.New("invalid format requested")
 		l.Error("Image format", err)
-		return nil, err
+		return nil, -1, err
 	}
 	if err != nil {
 		l.Error("Encoding image", err)
-		return nil, err
+		return nil, -1, err
 	}
 
 	imgBytes = buf.Bytes()
-	// if reqWidth < sourceWidth {
-	// 	l.Info("Create Image", imageName)
-	// 	newImgDir := fmt.Sprintf("./../../../static/images/%d/%s/%s", reqWidth, pathFragments[2], pathFragments[3])
-	// 	newImgName := fmt.Sprintf("%s/%s", newImgDir, imageName)
-
-	// 	err := os.MkdirAll(newImgDir, 0755) // 0755 — стандартные права доступа
-	// 	if err != nil {
-	// 		fmt.Printf("Failed to create directory: %v\n", err)
-	// 		return nil, err
-	// 	}
-
-	// 	err = os.WriteFile(newImgName, imgBytes, 0665)
-	// 	if err != nil {
-	// 		fmt.Printf("Creating image: %v\n", err)
-	// 		return nil, err
-	// 	}
-	// }
-
-	return
+	return imgBytes, sourceWidth, nil
 }
 
-func getNewImage(req *suckhttp.Request, lg logger.Logger) *suckhttp.Response {
-	pathFragments := strings.Split(req.Uri.Path[8:], "/")
-	reqWidth, err := strconv.Atoi(pathFragments[0])
-	if err != nil {
-		println("Error parse width (string) to (int)", err)
-		return suckhttp.NewResponse(500, "Internal Server Error")
-	}
-
-	imageName := pathFragments[1]
-	pathToSourceImage := fmt.Sprintf("./../../static/images/source/%s", imageName)
-	defaultImageFile, err := os.Open(pathToSourceImage)
-	if err != nil {
-		println("Error opening file")
-		return suckhttp.NewResponse(500, "Internal Server Error")
-	}
-	defer defaultImageFile.Close()
-
-	format := getFileFormat(imageName)
-
-	var img image.Image
-	img, _, err = image.Decode(defaultImageFile)
-	if err != nil {
-		println("Error decoding image")
-		return suckhttp.NewResponse(500, "Internal Server Error")
-	}
-
-	sourceWidth := img.Bounds().Dx()
-	img = resize.Resize(uint(reqWidth), 0, img, resize.Lanczos3)
-
-	buf := new(bytes.Buffer)
-	switch format {
-	case "png":
-		err = png.Encode(buf, img)
-	case "jpeg":
-		err = jpeg.Encode(buf, img, nil)
-	default:
-		println("Some error")
-		return suckhttp.NewResponse(400, "Bad Request")
-	}
-	if err != nil {
-		println("Encoding error", err)
-		return suckhttp.NewResponse(500, "Internal Server Error")
-	}
-
-	imgBytes := buf.Bytes()
+func (s *service) saveImageInCache(l logger.Logger, imagePath, imageName string, reqWidth, sourceWidth int, imageBytes []byte) error {
 	if reqWidth < sourceWidth {
-		lg.Info("Create Image", imageName)
-		newImgName := fmt.Sprintf("./../../static/images/%d/%s", reqWidth, imageName)
-		err = os.WriteFile(newImgName, imgBytes, 0662)
+		l.Info("Create Image", imageName)
+		newImgDir := fmt.Sprintf("%s%d/%s", s.cachedImagePath, reqWidth, imagePath)
+		newImgName := fmt.Sprintf("%s/%s", newImgDir, imageName)
+
+		err := os.MkdirAll(newImgDir, 0755)
 		if err != nil {
-			println("Error creating image", err)
-			return suckhttp.NewResponse(500, "Internal Server Error")
+			l.Error("Creating image directory", err)
+			return err
+		}
+
+		err = os.WriteFile(newImgName, imageBytes, 0665)
+		if err != nil {
+			l.Error("Creating image", err)
+			return err
 		}
 	}
-	return suckhttp.NewResponse(200, "Ok").SetBody(imgBytes)
-}
-
-func getFileFormat(path string) string {
-	lower := strings.ToLower(path)
-	if strings.Contains(lower, ".jpg") || strings.Contains(lower, ".jpeg") {
-		return "jpeg"
-	} else if strings.Contains(lower, ".png") {
-		return "png"
-	}
-	return "unknown"
+	return nil
 }

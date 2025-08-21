@@ -1202,20 +1202,12 @@
 
                     let ok = await upsertFile(form);
                     if (ok) {
-                        instrumentIconLabel.children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/instruments/icon${i + 1}.png`;
+                        imagePath = `courses/${editCourseForm.elements['id'].value}/instruments/icon${i + 1}.png`;
+                        instrumentIconLabel.children[0].src = `/getFileByPath?path=${imagePath}&t=${new Date().getTime()}`;
                         instrumentIconLabel.children[0].classList.remove('d-none');
+                        updateImageInCache(imagePath);
                     }
                 });
-
-                /*
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <label for="icon-upload" class="text-center p-2 border rounded d-block clickable" style="cursor: pointer;">
-                        <img id="icon-preview" src="${instrument.icon}" alt="Preview" style="max-width: 100%; object-fit: contain;">
-                    </label>
-                                        
-                    <input type="file" id="icon-upload" accept="image/*" style="display: none;">
-                </div>
-                */
 
                 instrumentIconDiv.append(instrumentIconLabel, instrumentIconInput);
 
@@ -1463,7 +1455,9 @@
 
                                             let ok = await upsertFile(form);
                                             if (ok) {
-                                                lessonContentBlock.children[2].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${lessonContentIndex}.png`;
+                                                imagePath = `courses/${editCourseForm.elements['id'].value}/lessons/${i}/lessonContent${lessonContentIndex}.png`;
+                                                lessonContentBlock.children[2].children[0].src = `/getFileByPath?path=${imagePath}&t=${new Date().getTime()}`;
+                                                updateImageInCache(imagePath);
                                             }
                                         })
                                     }
@@ -1644,8 +1638,10 @@
 
                 let ok = await upsertFile(form);
                 if (ok) {
-                    instrumentIconLabel.children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/instruments/icon${newInstrumentCounter}.png`;
+                    imagePath = `courses/${editCourseForm.elements['id'].value}/instruments/icon${newInstrumentCounter}.png`;
+                    instrumentIconLabel.children[0].src = `/getFileByPath?path=${imagePath}&t=${new Date().getTime()}`;
                     instrumentIconLabel.children[0].classList.remove('d-none');
+                    updateImageInCache(imagePath);
                 }
             });
 
@@ -1944,7 +1940,9 @@
 
                             let ok = await upsertFile(form);
                             if (ok) {
-                                selectBlock.parentElement.children[2].children[0].src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/lessons/${lessonItemIndex}/lessonContent${lessonContentIndex}.png`;
+                                imagePath = `courses/${editCourseForm.elements['id'].value}/lessons/${lessonItemIndex}/lessonContent${lessonContentIndex}.png`;
+                                selectBlock.parentElement.children[2].children[0].src = `/getFileByPath?path=${imagePath}&t=${new Date().getTime()}`;
+                                updateImageInCache(imagePath);
                             }
                         })
                     }
@@ -2129,14 +2127,30 @@
                 form.append('file', renamedFile);
 
                 let ok = await upsertFile(form);
+                console.log(ok);
                 if (ok) {
-                    document.getElementById('courseCover').src = `/getFileByPath?path=courses/${editCourseForm.elements['id'].value}/cover.png`;
+                    imagePath = `courses/${editCourseForm.elements['id'].value}/cover.png`
+                    document.getElementById('courseCover').src = `/getFileByPath?path=${imagePath}&t=${new Date().getTime()}`;
+                    updateImageInCache(imagePath);
                 }
             })
         }
 
-        function upsertFile(form) {
-            return fetch("/upsertFileByPath", {
+        function updateImageInCache(imagePath) {
+            uri = `/updateImage/${imagePath}`;
+            return fetch(uri, {
+                method: "PUT"
+            }).then(response => {
+                if (!response.ok) {
+                    console.error("error updadting image in cache");
+                    return false
+                }
+                return true
+            })
+        }
+
+        async function upsertFile(form) {
+            return await fetch("/upsertFileByPath", {
                 method: "POST",
                 body: form
             }).then(response => {
